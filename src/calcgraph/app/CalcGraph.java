@@ -21,11 +21,11 @@ public class CalcGraph extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         // Código para a interface gráfica JavaFX
-        // Parent root = FXMLLoader.load(getClass().getResource("/calcgraph/view/layout/FXMLDocument.fxml"));
-        // Scene scene = new Scene(root);
-        // stage.setScene(scene);
-        // stage.setTitle("CalcGraph - Calculadora Gráfica");
-        // stage.show();
+        Parent root = FXMLLoader.load(getClass().getResource("/calcgraph/view/layout/FXMLDocument.fxml"));
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("CalcGraph - Calculadora Gráfica");
+        stage.show();
 
         // Para esta etapa, não vamos exibir a interface gráfica, focaremos no console.
         // Se você quiser a janela, descomente as linhas acima.

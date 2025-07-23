@@ -1,0 +1,197 @@
+package calcgraph.view.controller;
+
+import calcgraph.model.AnalisadorDeExpressoes;
+import calcgraph.model.exception.ExpressionException;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane; // Importe Pane ou VBox, StackPane
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox; // Importe VBox
+
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
+
+/**
+ * Controlador para a interface da Calculadora Gráfica no modo Cálculo.
+ * Gerencia a interação do usuário com os botões e a exibição de resultados/erros.
+ * Inclui lógica para navegação entre os modos Cálculo, Gráfico e Numérico.
+ */
+public class CalculatorController {
+
+    @FXML
+    private TextField display; // Campo de expressão/resultado para o modo Cálculo
+
+    @FXML
+    private Label errorMessageLabel; // Label para exibir mensagens de erro na UI
+
+    // --- Novas variáveis FXML para o sistema de modos ---
+    @FXML
+    private StackPane contentArea; // O StackPane que contém todos os painéis de modo
+
+    @FXML
+    private VBox calculationModePane; // Painel do modo Cálculo
+    @FXML
+    private VBox graphModePane;       // Painel do modo Gráfico
+    @FXML
+    private VBox numericModePane;     // Painel do modo Numérico
+
+    @FXML
+    private Button btnModeCalculation; // Botão de navegação para Cálculo
+    @FXML
+    private Button btnModeGraph;       // Botão de navegação para Gráfico
+    @FXML
+    private Button btnModeNumeric;     // Botão de navegação para Numérico
+    // --- Fim das novas variáveis FXML ---
+
+    private final DecimalFormat decimalFormat;
+
+    public CalculatorController() {
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
+        decimalFormat = new DecimalFormat("0.##########", symbols);
+    }
+
+    /**
+     * Método de inicialização. Chamado automaticamente após o FXML ser carregado.
+     * Garante que o foco esteja no campo 'display' ao iniciar a aplicação
+     * e configura o modo inicial (Cálculo).
+     */
+    @FXML
+    public void initialize() {
+        display.requestFocus();
+        // Garante que apenas o painel de cálculo esteja visível no início
+        showModePane(calculationModePane);
+        // Atualiza o estilo do botão de cálculo para indicar que está ativo
+        updateModeButtonStyles(btnModeCalculation);
+    }
+
+    /**
+     * Lida com a mudança de modo da calculadora (Cálculo, Gráfico, Numérico).
+     * @param event O evento de ação do botão de modo.
+     */
+    @FXML
+    private void handleModeChange(ActionEvent event) {
+        Button clickedButton = (Button) event.getSource();
+        errorMessageLabel.setText(""); // Limpa erros ao mudar de modo
+
+        if (clickedButton == btnModeCalculation) {
+            showModePane(calculationModePane);
+            display.requestFocus(); // Foca no display do cálculo ao voltar
+        } else if (clickedButton == btnModeGraph) {
+            showModePane(graphModePane);
+        } else if (clickedButton == btnModeNumeric) {
+            showModePane(numericModePane);
+        }
+        updateModeButtonStyles(clickedButton); // Atualiza os estilos dos botões
+    }
+
+    /**
+     * Mostra apenas o painel do modo selecionado e esconde os outros.
+     * @param paneToShow O painel (VBox) a ser exibido.
+     */
+    private void showModePane(Pane paneToShow) {
+        // Itera sobre todos os filhos do StackPane e os esconde
+        contentArea.getChildren().forEach(pane -> pane.setVisible(false));
+        // Torna o painel desejado visível
+        paneToShow.setVisible(true);
+    }
+
+    /**
+     * Atualiza o estilo dos botões de modo para indicar qual modo está ativo.
+     * @param activeButton O botão que foi clicado e agora está ativo.
+     */
+    private void updateModeButtonStyles(Button activeButton) {
+        // Resetar estilo de todos os botões de modo
+        btnModeCalculation.setStyle("-fx-background-color: #e6f7ff;");
+        btnModeGraph.setStyle("-fx-background-color: #e6f7ff;");
+        btnModeNumeric.setStyle("-fx-background-color: #e6f7ff;");
+
+        // Aplicar estilo de ativo ao botão clicado
+        activeButton.setStyle("-fx-background-color: #cceeff; -fx-font-weight: bold;");
+    }
+
+    // --- Métodos de Interação da Calculadora (permanecem os mesmos) ---
+
+    @FXML
+    private void handleNumber(ActionEvent event) {
+        String number = ((Button) event.getSource()).getText();
+        display.appendText(number);
+        errorMessageLabel.setText("");
+    }
+
+    @FXML
+    private void handleOperator(ActionEvent event) {
+        String operator = ((Button) event.getSource()).getText();
+        display.appendText(operator);
+        errorMessageLabel.setText("");
+    }
+
+    @FXML
+    private void handleDecimal(ActionEvent event) {
+        display.appendText(".");
+        errorMessageLabel.setText("");
+    }
+
+    @FXML
+    private void handleFunction(ActionEvent event) {
+        String function = ((Button) event.getSource()).getText();
+        display.appendText(function + "(");
+        errorMessageLabel.setText("");
+    }
+
+    @FXML
+    private void handleConstant(ActionEvent event) {
+        String constant = ((Button) event.getSource()).getText();
+        display.appendText(constant);
+        errorMessageLabel.setText("");
+    }
+
+    @FXML
+    private void handleParenthesis(ActionEvent event) {
+        String parenthesis = ((Button) event.getSource()).getText();
+        display.appendText(parenthesis);
+        errorMessageLabel.setText("");
+    }
+
+    @FXML
+    private void handleClear(ActionEvent event) {
+        display.clear();
+        errorMessageLabel.setText("");
+    }
+
+    @FXML
+    private void handleDelete(ActionEvent event) {
+        String currentText = display.getText();
+        if (!currentText.isEmpty()) {
+            display.setText(currentText.substring(0, currentText.length() - 1));
+        }
+        errorMessageLabel.setText("");
+    }
+
+    @FXML
+    private void handleEquals(ActionEvent event) {
+        String expression = display.getText();
+        try {
+            double result = AnalisadorDeExpressoes.avaliarExpressao(expression);
+            display.setText(decimalFormat.format(result));
+            errorMessageLabel.setText("");
+        } catch (ExpressionException e) {
+            errorMessageLabel.setText("Erro: " + e.getMessage());
+            System.err.println("Erro na expressão (UI): " + e.getMessage());
+        } catch (Exception e) {
+            errorMessageLabel.setText("Erro Inesperado. Verifique o console.");
+            System.err.println("Ocorreu um erro inesperado (UI): " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleToggleSign(ActionEvent event) {
+        System.out.println("Botão +/- clicado. Implementação pendente.");
+        display.appendText("-");
+        errorMessageLabel.setText("Função '+/-' pode ser complexa. Verifique a expressão.");
+    }
+}
