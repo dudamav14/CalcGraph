@@ -7,9 +7,6 @@ import java.util.List;
 
 import java.util.Stack;
 
-/**
- * Avalia uma expressão matemática na notação pós-fixada (RPN).
- */
 public class PostfixEvaluator {
 
     /**
@@ -29,13 +26,12 @@ public class PostfixEvaluator {
                 } catch (NumberFormatException e) {
                     throw new ExpressionException("Número inválido: " + token.getValue(), e);
                 }
-            } else if (token.getType() == TokenType.CONSTANT) { // *** CORREÇÃO AQUI: Tratamento de CONSTANT ***
+            } else if (token.getType() == TokenType.CONSTANT) { 
                 if (token.getValue().equalsIgnoreCase("pi")) {
                     operandStack.push(Math.PI);
                 } else if (token.getValue().equalsIgnoreCase("e")) {
                     operandStack.push(Math.E);
                 } else {
-                    // Isso não deveria acontecer se o parser for robusto, mas é uma segurança.
                     throw new ExpressionException("Constante desconhecida: " + token.getValue());
                 }
             } else if (token.getType() == TokenType.OPERATOR) {

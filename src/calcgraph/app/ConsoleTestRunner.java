@@ -5,10 +5,6 @@ import calcgraph.model.exception.ExpressionException;
 
 import java.util.Scanner;
 
-/**
- * Classe auxiliar para testar a funcionalidade do AnalisadorDeExpressoes via console.
- * Não é uma aplicação JavaFX.
- */
 public class ConsoleTestRunner {
 
     public static void main(String[] args) {
@@ -17,7 +13,7 @@ public class ConsoleTestRunner {
         System.out.println("Digite uma expressão matemática (ou 'sair' para encerrar):");
 
         while (true) {
-            System.out.print("> "); // O prompt agora deve aparecer
+            System.out.print("> "); 
             String input = scanner.nextLine();
 
             if (input.equalsIgnoreCase("sair")) {
@@ -27,7 +23,7 @@ public class ConsoleTestRunner {
 
             try {
                 double resultado = AnalisadorDeExpressoes.avaliarExpressao(input);
-                System.out.printf("Resultado: %.6f%n", resultado); // Precisão conforme RNF003
+                System.out.printf("Resultado: %.6f%n", resultado); 
             } catch (ExpressionException e) {
                 System.err.println("Erro na expressão: " + e.getMessage());
             } catch (Exception e) {
@@ -36,6 +32,5 @@ public class ConsoleTestRunner {
             }
         }
         scanner.close();
-        // Não System.exit(0) aqui, a menos que seja um aplicativo console standalone
     }
 }

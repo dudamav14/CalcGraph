@@ -17,41 +17,24 @@ public class OperatorPrecedence {
         PRECEDENCE.put("-", 1);
         PRECEDENCE.put("*", 2);
         PRECEDENCE.put("/", 2);
-        PRECEDENCE.put("^", 3); // Potência tem a maior precedência
+        PRECEDENCE.put("^", 3);
 
         // Definir associatividade (true = esquerda para direita, false = direita para esquerda)
         LEFT_ASSOCIATIVITY.put("+", true);
         LEFT_ASSOCIATIVITY.put("-", true);
         LEFT_ASSOCIATIVITY.put("*", true);
         LEFT_ASSOCIATIVITY.put("/", true);
-        LEFT_ASSOCIATIVITY.put("^", false); // Potência é associativa à direita
+        LEFT_ASSOCIATIVITY.put("^", false);
     }
 
-    /**
-     * Retorna a precedência de um operador.
-     *
-     * @param operator O operador.
-     * @return O nível de precedência.
-     */
     public static int getPrecedence(String operator) {
-        return PRECEDENCE.getOrDefault(operator, 0); // 0 para operadores não mapeados (e.g., parênteses)
+        return PRECEDENCE.getOrDefault(operator, 0);
     }
 
-    /**
-     * Verifica se um operador tem associatividade à esquerda.
-     *
-     * @param operator O operador.
-     * @return true se for associativo à esquerda, false caso contrário.
-     */
     public static boolean isLeftAssociative(String operator) {
-        return LEFT_ASSOCIATIVITY.getOrDefault(operator, true); // Padrão para esquerda se não definido
+        return LEFT_ASSOCIATIVITY.getOrDefault(operator, true);
     }
 
-    /**
-     * Verifica se o token é um operador válido.
-     * @param token O token a ser verificado.
-     * @return true se for um operador, false caso contrário.
-     */
     public static boolean isOperator(String token) {
         return PRECEDENCE.containsKey(token);
     }
