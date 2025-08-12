@@ -1,1 +1,6 @@
+# Ignora arquivos de projeto do NetBeans
+/nbproject/
+
+# Ignora a pasta de build
 /build/
+/dist/
