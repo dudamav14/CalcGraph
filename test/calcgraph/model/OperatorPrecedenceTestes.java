@@ -14,41 +14,76 @@ public class OperatorPrecedenceTestes {
     // --- Testes para o método getPrecedence ---
 
     @Test
-    public void testarPrecedencia_OperadoresValidos() {
-        // Verifica se a precedência para operadores conhecidos está correta.
+    public void testarPrecedencia_Soma() {
+        // Verifica a precedência do operador de soma.
         assertEquals(1, OperatorPrecedence.getPrecedence("+"));
+    }
+
+    @Test
+    public void testarPrecedencia_Subtracao() {
+        // Verifica a precedência do operador de subtração.
         assertEquals(1, OperatorPrecedence.getPrecedence("-"));
+    }
+
+    @Test
+    public void testarPrecedencia_Multiplicacao() {
+        // Verifica a precedência do operador de multiplicação.
         assertEquals(2, OperatorPrecedence.getPrecedence("*"));
+    }
+
+    @Test
+    public void testarPrecedencia_Divisao() {
+        // Verifica a precedência do operador de divisão.
         assertEquals(2, OperatorPrecedence.getPrecedence("/"));
+    }
+
+    @Test
+    public void testarPrecedencia_Potenciacao() {
+        // Verifica a precedência do operador de potenciação.
         assertEquals(3, OperatorPrecedence.getPrecedence("^"));
     }
 
     @Test
     public void testarPrecedencia_OperadorInvalido() {
-        // Verifica se a precedência para um operador inválido retorna o valor padrão (0).
-        assertEquals(0, OperatorPrecedence.getPrecedence("x")); 
+        // Verifica se a precedência para um operador inválido retorna 0.
+        assertEquals(0, OperatorPrecedence.getPrecedence("x"));
     }
 
     @Test
     public void testarPrecedencia_OperadorNulo() {
         // Testa se o método lida corretamente com um operador nulo.
-        assertEquals(0, OperatorPrecedence.getPrecedence(null)); 
+        assertEquals(0, OperatorPrecedence.getPrecedence(null));
     }
 
     // --- Testes para o método isLeftAssociative ---
 
     @Test
-    public void testarAssociatividade_OperadoresEsquerda() {
-        // Verifica se os operadores de associatividade à esquerda retornam true.
+    public void testarAssociatividade_Soma() {
+        // Verifica a associatividade da soma (esquerda).
         assertTrue(OperatorPrecedence.isLeftAssociative("+"));
+    }
+
+    @Test
+    public void testarAssociatividade_Subtracao() {
+        // Verifica a associatividade da subtração (esquerda).
         assertTrue(OperatorPrecedence.isLeftAssociative("-"));
+    }
+
+    @Test
+    public void testarAssociatividade_Multiplicacao() {
+        // Verifica a associatividade da multiplicação (esquerda).
         assertTrue(OperatorPrecedence.isLeftAssociative("*"));
+    }
+
+    @Test
+    public void testarAssociatividade_Divisao() {
+        // Verifica a associatividade da divisão (esquerda).
         assertTrue(OperatorPrecedence.isLeftAssociative("/"));
     }
 
     @Test
-    public void testarAssociatividade_OperadoresDireita() {
-        // Verifica se o operador de associatividade à direita (^) retorna false.
+    public void testarAssociatividade_Potenciacao() {
+        // Verifica a associatividade da potenciação (direita).
         assertFalse(OperatorPrecedence.isLeftAssociative("^"));
     }
 
@@ -67,21 +102,47 @@ public class OperatorPrecedenceTestes {
     // --- Testes para o método isOperator ---
 
     @Test
-    public void testarSeEhOperador_OperadoresValidos() {
-        // Verifica se o método retorna true para operadores válidos.
+    public void testarSeEhOperador_Soma() {
         assertTrue(OperatorPrecedence.isOperator("+"));
+    }
+    
+    @Test
+    public void testarSeEhOperador_Subtracao() {
         assertTrue(OperatorPrecedence.isOperator("-"));
+    }
+    
+    @Test
+    public void testarSeEhOperador_Multiplicacao() {
         assertTrue(OperatorPrecedence.isOperator("*"));
+    }
+    
+    @Test
+    public void testarSeEhOperador_Divisao() {
         assertTrue(OperatorPrecedence.isOperator("/"));
+    }
+    
+    @Test
+    public void testarSeEhOperador_Potenciacao() {
         assertTrue(OperatorPrecedence.isOperator("^"));
     }
-
+    
     @Test
-    public void testarSeEhOperador_NaoOperadores() {
-        // Verifica se o método retorna false para tokens que não são operadores.
+    public void testarSeEhOperador_NaoOperador() {
         assertFalse(OperatorPrecedence.isOperator("5"));
+    }
+    
+    @Test
+    public void testarSeEhOperador_Parenteses() {
         assertFalse(OperatorPrecedence.isOperator("("));
+    }
+    
+    @Test
+    public void testarSeEhOperador_Funcao() {
         assertFalse(OperatorPrecedence.isOperator("sin"));
+    }
+    
+    @Test
+    public void testarSeEhOperador_Nulo() {
         assertFalse(OperatorPrecedence.isOperator(null));
     }
 }

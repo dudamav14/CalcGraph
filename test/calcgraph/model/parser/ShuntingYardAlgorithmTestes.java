@@ -26,13 +26,11 @@ public class ShuntingYardAlgorithmTestes {
         );
         List<Token> postfixTokens = algorithm.convertToPostfix(infixTokens);
         
-        assertEquals(3, postfixTokens.size());
-        assertEquals(TokenType.NUMBER, postfixTokens.get(0).getType());
-        assertEquals("3", postfixTokens.get(0).getValue());
-        assertEquals(TokenType.NUMBER, postfixTokens.get(1).getType());
-        assertEquals("4", postfixTokens.get(1).getValue());
-        assertEquals(TokenType.OPERATOR, postfixTokens.get(2).getType());
-        assertEquals("+", postfixTokens.get(2).getValue());
+        List<Token> expectedTokens = Arrays.asList(
+            new NumberToken("3"), new NumberToken("4"), new OperatorToken("+")
+        );
+        
+        assertEquals(expectedTokens.toString(), postfixTokens.toString());
     }
 
     @Test
@@ -43,17 +41,11 @@ public class ShuntingYardAlgorithmTestes {
         );
         List<Token> postfixTokens = algorithm.convertToPostfix(infixTokens);
         
-        assertEquals(5, postfixTokens.size());
-        assertEquals(TokenType.NUMBER, postfixTokens.get(0).getType());
-        assertEquals("2", postfixTokens.get(0).getValue());
-        assertEquals(TokenType.NUMBER, postfixTokens.get(1).getType());
-        assertEquals("3", postfixTokens.get(1).getValue());
-        assertEquals(TokenType.OPERATOR, postfixTokens.get(2).getType());
-        assertEquals("*", postfixTokens.get(2).getValue());
-        assertEquals(TokenType.NUMBER, postfixTokens.get(3).getType());
-        assertEquals("4", postfixTokens.get(3).getValue());
-        assertEquals(TokenType.OPERATOR, postfixTokens.get(4).getType());
-        assertEquals("+", postfixTokens.get(4).getValue());
+        List<Token> expectedTokens = Arrays.asList(
+            new NumberToken("2"), new NumberToken("3"), new OperatorToken("*"), new NumberToken("4"), new OperatorToken("+")
+        );
+        
+        assertEquals(expectedTokens.toString(), postfixTokens.toString());
     }
 
     @Test
@@ -64,17 +56,11 @@ public class ShuntingYardAlgorithmTestes {
         );
         List<Token> postfixTokens = algorithm.convertToPostfix(infixTokens);
         
-        assertEquals(5, postfixTokens.size());
-        assertEquals(TokenType.NUMBER, postfixTokens.get(0).getType());
-        assertEquals("2", postfixTokens.get(0).getValue());
-        assertEquals(TokenType.NUMBER, postfixTokens.get(1).getType());
-        assertEquals("3", postfixTokens.get(1).getValue());
-        assertEquals(TokenType.OPERATOR, postfixTokens.get(2).getType());
-        assertEquals("+", postfixTokens.get(2).getValue());
-        assertEquals(TokenType.NUMBER, postfixTokens.get(3).getType());
-        assertEquals("4", postfixTokens.get(3).getValue());
-        assertEquals(TokenType.OPERATOR, postfixTokens.get(4).getType());
-        assertEquals("*", postfixTokens.get(4).getValue());
+        List<Token> expectedTokens = Arrays.asList(
+            new NumberToken("2"), new NumberToken("3"), new OperatorToken("+"), new NumberToken("4"), new OperatorToken("*")
+        );
+        
+        assertEquals(expectedTokens.toString(), postfixTokens.toString());
     }
 
     @Test
@@ -85,31 +71,37 @@ public class ShuntingYardAlgorithmTestes {
         );
         List<Token> postfixTokens = algorithm.convertToPostfix(infixTokens);
         
-        assertEquals(2, postfixTokens.size());
-        assertEquals(TokenType.NUMBER, postfixTokens.get(0).getType());
-        assertEquals("3.14", postfixTokens.get(0).getValue());
-        assertEquals(TokenType.FUNCTION, postfixTokens.get(1).getType());
-        assertEquals("sin", postfixTokens.get(1).getValue());
+        List<Token> expectedTokens = Arrays.asList(
+            new NumberToken("3.14"), new FunctionToken("sin")
+        );
+        
+        assertEquals(expectedTokens.toString(), postfixTokens.toString());
     }
 
 
     // --- Testes para casos de erro ---
 
-    @Test(expected = ExpressionException.class)
+    @Test
     public void testConvertToPostfix_UnbalancedParentheses_MissingClose() {
         // Testa uma expressão com parênteses desbalanceados (falta ')').
         List<Token> infixTokens = Arrays.asList(
             new ParenthesisToken("("), new NumberToken("2"), new OperatorToken("+"), new NumberToken("3")
         );
-        algorithm.convertToPostfix(infixTokens);
+        
+        assertThrows(ExpressionException.class, () -> {
+            algorithm.convertToPostfix(infixTokens);
+        });
     }
     
-    @Test(expected = ExpressionException.class)
+    @Test
     public void testConvertToPostfix_UnbalancedParentheses_MissingOpen() {
         // Testa uma expressão com parênteses desbalanceados (falta '(').
         List<Token> infixTokens = Arrays.asList(
             new NumberToken("2"), new OperatorToken("+"), new NumberToken("3"), new ParenthesisToken(")")
         );
-        algorithm.convertToPostfix(infixTokens);
+        
+        assertThrows(ExpressionException.class, () -> {
+            algorithm.convertToPostfix(infixTokens);
+        });
     }
 }
