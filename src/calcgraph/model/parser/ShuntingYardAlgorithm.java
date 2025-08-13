@@ -38,6 +38,11 @@ public class ShuntingYardAlgorithm {
                     operatorStack.push(token);
                     break;
                 case OPERATOR:
+                    if (value.equals("!")) {
+                        // Fatorial é pós-fixo, então só empilha sem comparar precedência
+                        operatorStack.push(token);
+                        break;
+                    }
                     while (!operatorStack.isEmpty() && operatorStack.peek().getType() == TokenType.OPERATOR &&
                            ((OperatorPrecedence.isLeftAssociative(value) && OperatorPrecedence.getPrecedence(value) <= OperatorPrecedence.getPrecedence(operatorStack.peek().getValue())) ||
                             (!OperatorPrecedence.isLeftAssociative(value) && OperatorPrecedence.getPrecedence(value) < OperatorPrecedence.getPrecedence(operatorStack.peek().getValue())))) {

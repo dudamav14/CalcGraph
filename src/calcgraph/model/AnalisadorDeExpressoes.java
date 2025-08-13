@@ -16,7 +16,7 @@ import java.util.Stack;
  */
 public class AnalisadorDeExpressoes {
 
-    private static final String VALID_CHARS_BASIC_REGEX = "[0-9+\\-*/^().,a-zA-Z\\s]+";
+    private static final String VALID_CHARS_BASIC_REGEX = "[0-9+\\-*/^().,a-zA-Z!\\s]+";
 
     public static boolean validarExpressaoPreliminar(String expressao) {
         if (expressao == null || expressao.trim().isEmpty()) {

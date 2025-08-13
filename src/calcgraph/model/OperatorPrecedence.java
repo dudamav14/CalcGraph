@@ -18,6 +18,7 @@ public class OperatorPrecedence {
         PRECEDENCE.put("*", 2);
         PRECEDENCE.put("/", 2);
         PRECEDENCE.put("^", 3);
+        PRECEDENCE.put("!", 4);
 
         // Definir associatividade (true = esquerda para direita, false = direita para esquerda)
         LEFT_ASSOCIATIVITY.put("+", true);
@@ -25,6 +26,7 @@ public class OperatorPrecedence {
         LEFT_ASSOCIATIVITY.put("*", true);
         LEFT_ASSOCIATIVITY.put("/", true);
         LEFT_ASSOCIATIVITY.put("^", false);
+        LEFT_ASSOCIATIVITY.put("!", false);
     }
 
     public static int getPrecedence(String operator) {

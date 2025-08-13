@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 public class ExpressionParser {
 
     private static final String NUMBER_REGEX = "\\d+(\\.\\d+)?";
-    private static final String OPERATOR_REGEX = "[+\\-*/^]";
+    private static final String OPERATOR_REGEX = "[+\\-*/^!]";
     private static final String PARENTHESIS_REGEX = "[()]";
     private static final String FUNCTION_CONSTANT_REGEX = "[a-zA-Z]+";
 
@@ -125,11 +125,22 @@ public class ExpressionParser {
             if (current.getType() == TokenType.OPERATOR) {
                 String op = current.getValue();
                 
+                if (op.equals("!")) {
+                    if (previous == null ||
+                        !(previous.getType() == TokenType.NUMBER ||
+                          previous.getType() == TokenType.CONSTANT ||
+                          (previous.getType() == TokenType.PARENTHESIS && previous.getValue().equals(")")))) {
+                        throw new ExpressionException("O operador '!' deve vir após um número, constante ou parênteses fechando.");
+                    }
+                    // Permite '!' no final ou antes de outro operador
+                    continue;
+                }
+                
                 if (previous == null && !op.equals("+") && !op.equals("-")) {
                     throw new ExpressionException("Operador '" + op + "' no início da expressão.");
                 }
                 
-                if (next == null) {
+                if (next == null && !op.equals("!")) {
                     throw new ExpressionException("Operador '" + op + "' no final da expressão.");
                 }
                 
@@ -196,7 +207,7 @@ public class ExpressionParser {
         }
         if (!tokens.isEmpty()) {
             Token lastToken = tokens.get(tokens.size() - 1);
-            if (lastToken.getType() == TokenType.OPERATOR && !lastToken.getValue().equals(")")) {
+            if (lastToken.getType() == TokenType.OPERATOR && !lastToken.getValue().equals(")") && !lastToken.getValue().equals("!")) {
               
                 throw new ExpressionException("Expressão termina com operador inválido.");
             }

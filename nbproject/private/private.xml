@@ -2,11 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/C:/Users/Caio/Documents/NetBeansProjects/CalcGraph/src/calcgraph/view/layout/FXMLDocument.fxml</file>
-            <file>file:/C:/Users/Caio/Documents/NetBeansProjects/CalcGraph/src/calcgraph/app/CalcGraph.java</file>
-            <file>file:/C:/Users/Caio/Documents/NetBeansProjects/CalcGraph/src/calcgraph/model/evaluator/PostfixEvaluator.java</file>
-            <file>file:/C:/Users/Caio/Documents/NetBeansProjects/CalcGraph/src/calcgraph/view/controller/CalculatorController.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

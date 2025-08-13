@@ -14,6 +14,7 @@ import javafx.scene.layout.VBox;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
+import javafx.scene.control.MenuItem;
 
 public class CalculatorController {
 
@@ -109,9 +110,19 @@ public class CalculatorController {
 
     @FXML
     private void handleFunction(ActionEvent event) {
-        String function = ((Button) event.getSource()).getText();
-        display.appendText(function + "(");
-        errorMessageLabel.setText("");
+        String functionText = "";
+
+        // Verifica a origem do evento (Button ou MenuItem) e extrai o texto
+        if (event.getSource() instanceof Button) {
+            functionText = ((Button) event.getSource()).getText();
+        } else if (event.getSource() instanceof MenuItem) {
+            functionText = ((MenuItem) event.getSource()).getText();
+        }
+
+        if (!functionText.isEmpty()) {
+            display.appendText(functionText + "(");
+            errorMessageLabel.setText("");
+        }
     }
 
     @FXML
