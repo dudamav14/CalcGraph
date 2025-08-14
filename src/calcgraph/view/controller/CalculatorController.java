@@ -28,7 +28,9 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.geometry.Insets;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TableRow;
+import javafx.scene.layout.GridPane;
 
 
 public class CalculatorController {
@@ -323,6 +325,32 @@ public class CalculatorController {
     
     // GRÁFICO
     
+    @FXML
+    private VBox functionInputsBox;
+    @FXML
+    private Pane mainGraphPane, comparisonGraphPane;
+    @FXML
+    private ListView<String> mainGraphLegend, comparisonGraphLegend;
+    @FXML
+    private Button btnSelectComparisonGraph;
+    @FXML
+    private GridPane smallCalculatorPane;
     
+    @FXML
+    private void handleAddFunctionField() {
+        TextField newField = new TextField();
+        newField.setPromptText("Digite a função (ex: x^2)");
+        functionInputsBox.getChildren().add(functionInputsBox.getChildren().size() - 1, newField);
+    }
+
+    @FXML
+    private void handleSelectComparisonGraph() {
+        // TODO: abrir diálogo para selecionar função salva e gerar gráfico no comparisonGraphPane
+    }
+
+    // Método para plotar gráficos (exemplo simples, pode ser com Canvas ou JFreeChart)
+    private void plotFunctionOnPane(Pane pane, String function) {
+        // TODO: implementar renderização
+    }
 
 }

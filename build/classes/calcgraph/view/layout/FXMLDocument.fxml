@@ -123,15 +123,51 @@
                       </GridPane>
                   </children>
                </VBox>
-               <VBox fx:id="graphModePane" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #e0ffe0;" visible="false">
-                   <children>
-                       <Label text="Tela do Modo Gráfico" textFill="#228b22">
-                           <font>
-                               <Font size="24.0" />
-                           </font>
-                       </Label>
-                   </children>
-               </VBox>
+               <VBox fx:id="graphModePane" alignment="TOP_CENTER" spacing="10.0" style="-fx-background-color: #e0ffe0;" visible="false">
+                    <padding>
+                        <Insets top="15" right="15" bottom="15" left="15"/>
+                    </padding>
+                    <children>
+                        <!-- Parte superior: campos de funções -->
+                        <HBox spacing="10">
+                            <!-- Coluna de funções -->
+                            <VBox fx:id="functionInputsBox" spacing="5">
+                                <TextField promptText="Digite a função (ex: x^2)" />
+                                <TextField promptText="Digite a função (ex: x+1)" />
+                                <TextField promptText="Digite a função (ex: -x^3)" />
+                                <Button text="+" onAction="#handleAddFunctionField" maxWidth="50"/>
+                            </VBox>
+
+                            <!-- Área de gráficos -->
+                            <HBox spacing="10">
+                                <!-- Gráfico principal -->
+                                <VBox spacing="5">
+                                    <Label text="Gráfico Principal"/>
+                                    <Pane fx:id="mainGraphPane" prefWidth="300" prefHeight="200" style="-fx-background-color: white; -fx-border-color: black;"/>
+                                    <Label text="Legenda:"/>
+                                    <ListView fx:id="mainGraphLegend" prefHeight="60"/>
+                                </VBox>
+
+                                <!-- Gráfico de comparação -->
+                                <VBox spacing="5">
+                                    <Label text="Gráfico de Comparação"/>
+                                    <StackPane>
+                                        <Pane fx:id="comparisonGraphPane" prefWidth="300" prefHeight="200" style="-fx-background-color: white; -fx-border-color: black;"/>
+                                        <Button fx:id="btnSelectComparisonGraph" text="Selecionar gráfico" onAction="#handleSelectComparisonGraph"/>
+                                    </StackPane>
+                                    <Label text="Legenda:"/>
+                                    <ListView fx:id="comparisonGraphLegend" prefHeight="60"/>
+                                </VBox>
+                            </HBox>
+                        </HBox>
+
+                        <!-- Calculadora reduzida -->
+                        <GridPane fx:id="smallCalculatorPane" hgap="5" vgap="5">
+                            <!-- Aqui vamos inserir dinamicamente no controller os mesmos botões da calculadora grande -->
+                        </GridPane>
+                    </children>
+                </VBox>
+
                <VBox fx:id="numericModePane" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #ffe0e0;" visible="false">
                    <children>
                        <Label text="Tela do Modo Numérico" textFill="#cc0000">
