@@ -131,11 +131,19 @@
                         <!-- Parte superior: campos de funções -->
                         <HBox spacing="10">
                             <!-- Coluna de funções -->
+                            
                             <VBox fx:id="functionInputsBox" spacing="5">
-                                <TextField promptText="Digite a função (ex: x^2)" />
-                                <TextField promptText="Digite a função (ex: x+1)" />
-                                <TextField promptText="Digite a função (ex: -x^3)" />
-                                <Button text="+" onAction="#handleAddFunctionField" maxWidth="50"/>
+                                <HBox alignment="CENTER">
+                                    <Label fx:id="errorMessageLabelGrafico" text="" textFill="red" wrapText="true" />
+                               </HBox>
+                                <HBox spacing="5">
+                                    <Button text="☆" onAction="#handleToggleFavorite"/>
+                                    <TextField onMouseClicked="#handleFunctionFieldClick" promptText="Digite a função (ex: x^2)" />
+                                    <Button text="X" onAction="#handleRemoveFunctionField"/>
+                                </HBox>
+                               <HBox alignment="CENTER">
+                                    <Button text="+" onAction="#handleAddFunctionField" maxWidth="50"/>
+                                </HBox>
                             </VBox>
 
                             <!-- Área de gráficos -->
@@ -161,12 +169,69 @@
                             </HBox>
                         </HBox>
 
-                        <!-- Calculadora reduzida -->
-                        <GridPane fx:id="smallCalculatorPane" hgap="5" vgap="5">
-                            <!-- Aqui vamos inserir dinamicamente no controller os mesmos botões da calculadora grande -->
-                        </GridPane>
+                        <GridPane hgap="5.0" vgap="5.0">
+                            <columnConstraints>
+                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
+                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
+                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
+                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
+                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
+                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
+                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
+                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
+                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
+                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
+                            </columnConstraints>
+                            <rowConstraints>
+                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            </rowConstraints>
+                            <children>
+                               <Button text="7" maxWidth="1.7976931348623157E308" onAction="#handleGraphNumber" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                               <Button text="8" maxWidth="1.7976931348623157E308" onAction="#handleGraphNumber" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                               <Button text="9" maxWidth="1.7976931348623157E308" onAction="#handleGraphNumber" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                               <Button text="/" maxWidth="1.7976931348623157E308" onAction="#handleGraphOperator" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+                               <Button text="*" maxWidth="1.7976931348623157E308" onAction="#handleGraphOperator" GridPane.columnIndex="4" GridPane.rowIndex="0" />
+                               <Button text="-" maxWidth="1.7976931348623157E308" onAction="#handleGraphOperator" GridPane.columnIndex="5" GridPane.rowIndex="0" />
+                               <Button text="+" maxWidth="1.7976931348623157E308" onAction="#handleGraphOperator" GridPane.columnIndex="6" GridPane.rowIndex="0" />
+                               <Button text="^" maxWidth="1.7976931348623157E308" onAction="#handleGraphOperator" GridPane.columnIndex="7" GridPane.rowIndex="0" />
+                               <Button text="(" maxWidth="1.7976931348623157E308" onAction="#handleGraphParenthesis" GridPane.columnIndex="8" GridPane.rowIndex="0" />
+                               <Button text=")" maxWidth="1.7976931348623157E308" onAction="#handleGraphParenthesis" GridPane.columnIndex="9" GridPane.rowIndex="0" />
+                               <Button text="4" maxWidth="1.7976931348623157E308" onAction="#handleGraphNumber" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                               <Button text="5" maxWidth="1.7976931348623157E308" onAction="#handleGraphNumber" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                               <Button text="6" maxWidth="1.7976931348623157E308" onAction="#handleGraphNumber" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                               <Button text="DEL" maxWidth="1.7976931348623157E308" onAction="#handleGraphDelete" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+                               <Button text="C" maxWidth="1.7976931348623157E308" onAction="#handleGraphClear" GridPane.columnIndex="5" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+                               <Button text="=" maxWidth="1.7976931348623157E308" onAction="#handleGraphEquals" style="-fx-background-color: #4CAF50;" GridPane.columnIndex="7" GridPane.columnSpan="3" GridPane.rowIndex="1" />
+                               <Button text="1" maxWidth="1.7976931348623157E308" onAction="#handleGraphNumber" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                               <Button text="2" maxWidth="1.7976931348623157E308" onAction="#handleGraphNumber" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                               <Button text="3" maxWidth="1.7976931348623157E308" onAction="#handleGraphNumber" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                               <Button text="0" maxWidth="1.7976931348623157E308" onAction="#handleGraphNumber" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="2" />
+                               <Button text="." maxWidth="1.7976931348623157E308" onAction="#handleGraphDecimal" GridPane.columnIndex="5" GridPane.rowIndex="2" />
+                               <Button text="floor" maxWidth="1.7976931348623157E308" onAction="#handleGraphFunction" GridPane.columnIndex="6" GridPane.rowIndex="2" />
+                               <Button text="ceil" maxWidth="1.7976931348623157E308" onAction="#handleGraphFunction" GridPane.columnIndex="7" GridPane.rowIndex="2" />
+                               <Button text="pi" maxWidth="1.7976931348623157E308" onAction="#handleGraphConstant" GridPane.columnIndex="8" GridPane.rowIndex="2" />
+                               <Button text="e" maxWidth="1.7976931348623157E308" onAction="#handleGraphConstant" GridPane.columnIndex="9" GridPane.rowIndex="2" />
+                               <Button text="sqrt" maxWidth="1.7976931348623157E308" onAction="#handleGraphFunction" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                               <Button text="abs" maxWidth="1.7976931348623157E308" onAction="#handleGraphFunction" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                               <Button text="sin" maxWidth="1.7976931348623157E308" onAction="#handleGraphFunction" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                               <Button text="cos" maxWidth="1.7976931348623157E308" onAction="#handleGraphFunction" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                               <Button text="tan" maxWidth="1.7976931348623157E308" onAction="#handleGraphFunction" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+                               <Button text="log" maxWidth="1.7976931348623157E308" onAction="#handleGraphFunction" GridPane.columnIndex="5" GridPane.rowIndex="3" />
+                               <Button text="ln" maxWidth="1.7976931348623157E308" onAction="#handleGraphFunction" GridPane.columnIndex="6" GridPane.rowIndex="3" />
+                               <Button text="mean" maxWidth="1.7976931348623157E308" onAction="#handleGraphFunction" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                               <Button text="mode" maxWidth="1.7976931348623157E308" onAction="#handleGraphFunction" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                               <Button text="median" maxWidth="1.7976931348623157E308" onAction="#handleGraphFunction" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                               <Button text="variance" maxWidth="1.7976931348623157E308" onAction="#handleGraphFunction" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                               <Button text="standartdeviation" maxWidth="1.7976931348623157E308" onAction="#handleGraphFunction" GridPane.columnIndex="4" GridPane.rowIndex="4" />
+                               <Button text="Z" maxWidth="1.7976931348623157E308" onAction="#handleGraphFunction" GridPane.columnIndex="5" GridPane.rowIndex="4" />
+                               <Button text="T" maxWidth="1.7976931348623157E308" onAction="#handleGraphFunction" GridPane.columnIndex="6" GridPane.rowIndex="4" />
+                            </children>
+                         </GridPane>
                     </children>
                 </VBox>
+
 
                <VBox fx:id="numericModePane" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #ffe0e0;" visible="false">
                    <children>

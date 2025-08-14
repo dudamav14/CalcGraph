@@ -18,12 +18,14 @@ public class ExpressionParser {
     private static final String OPERATOR_REGEX = "[+\\-*/^!]";
     private static final String PARENTHESIS_REGEX = "[()]";
     private static final String FUNCTION_CONSTANT_REGEX = "[a-zA-Z]+";
+    private static final String SEPARATOR_REGEX = ",";
 
     private static final Pattern TOKEN_PATTERN = Pattern.compile(
             NUMBER_REGEX + "|" +
             OPERATOR_REGEX + "|" +
             PARENTHESIS_REGEX + "|" +
-            FUNCTION_CONSTANT_REGEX
+            FUNCTION_CONSTANT_REGEX + "|" +
+            SEPARATOR_REGEX
     );
 
     
@@ -58,6 +60,8 @@ public class ExpressionParser {
                 }
             } else if (tokenValue.matches(PARENTHESIS_REGEX)) {
                 tokenType = TokenType.PARENTHESIS;
+            }else if (tokenValue.equals(",")) { 
+                tokenType = TokenType.SEPARATOR;
             } else if (tokenValue.matches(FUNCTION_CONSTANT_REGEX)) {
                 if (isConstant(tokenValue)) {
                     tokenType = TokenType.CONSTANT;
@@ -191,6 +195,7 @@ public class ExpressionParser {
                     throw new ExpressionException("Número antes de função, constante ou abre parênteses sem operador.");
                 }
             }
+            
             if (current.getType() == TokenType.FUNCTION) {
                
                 if (next == null || (next.getType() != TokenType.PARENTHESIS || !next.getValue().equals("("))) {
@@ -204,6 +209,17 @@ public class ExpressionParser {
                     throw new ExpressionException("Constante '" + current.getValue() + "' seguida por número/função/constante/abre parênteses sem operador.");
                 }
             }
+            
+            if (current.getType() == TokenType.SEPARATOR) {
+                // A vírgula deve ser sempre precedida por um operando (número, constante, etc.)
+                if (previous == null || previous.getType() == TokenType.OPERATOR || previous.getType() == TokenType.FUNCTION || (previous.getType() == TokenType.PARENTHESIS && previous.getValue().equals("("))) {
+                    throw new ExpressionException("Vírgula ',' em posição inválida.");
+                }
+                // A vírgula deve ser sempre seguida por um operando ou um parêntese de fechamento
+                if (next == null || next.getType() == TokenType.OPERATOR || (next.getType() == TokenType.PARENTHESIS && next.getValue().equals(")"))) {
+                    throw new ExpressionException("Vírgula ',' em posição inválida.");
+                }
+            }
         }
         if (!tokens.isEmpty()) {
             Token lastToken = tokens.get(tokens.size() - 1);
@@ -214,7 +230,6 @@ public class ExpressionParser {
         }
     }
 
-    
     private boolean isConstant(String value) {
         return value.equalsIgnoreCase("pi") || value.equalsIgnoreCase("e");
     }

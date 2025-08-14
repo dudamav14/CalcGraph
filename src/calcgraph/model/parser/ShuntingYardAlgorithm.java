@@ -37,6 +37,14 @@ public class ShuntingYardAlgorithm {
                 case FUNCTION:
                     operatorStack.push(token);
                     break;
+                case SEPARATOR: 
+                    while (!operatorStack.isEmpty() && !operatorStack.peek().getValue().equals("(")) {
+                        outputQueue.add(operatorStack.pop());
+                    }
+                    if (operatorStack.isEmpty()) {
+                        throw new ExpressionException("Vírgula ',' em posição inválida ou parênteses desbalanceados.");
+                    }
+                    break; // Pula o resto da iteração, não empilha a vírgula
                 case OPERATOR:
                     if (value.equals("!")) {
                         // Fatorial é pós-fixo, então só empilha sem comparar precedência

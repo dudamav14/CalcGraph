@@ -55,12 +55,26 @@ public class PostfixEvaluator {
                 double result = applyOperator(token.getValue(), operand1, operand2);
                 operandStack.push(result);
             } else if (token.getType() == TokenType.FUNCTION) {
-                if (operandStack.isEmpty()) {
-                    throw new ExpressionException("Sintaxe inválida: função '" + token.getValue() + "' requer um operando.");
+                String functionName = token.getValue().toLowerCase();
+                
+                if (functionName.equals("mean") || functionName.equals("mode") || functionName.equals("median") || functionName.equals("variance") || functionName.equals("standarddeviation")) {
+                    List<Double> arguments = new ArrayList<>();
+                    // Enquanto a pilha não estiver vazia, desempilha e adiciona à lista
+                    while (!operandStack.isEmpty()) {
+                        arguments.add(operandStack.pop());
+                    }
+                    // A lista de argumentos está na ordem inversa, então vamos reverter
+                    Collections.reverse(arguments);
+                    double result = applyStatistic(functionName, arguments);
+                    operandStack.push(result);
+                }else{
+                    if (operandStack.isEmpty()) {
+                        throw new ExpressionException("Sintaxe inválida: função '" + token.getValue() + "' requer um operando.");
+                    }
+                    double operand = operandStack.pop();
+                    double result = applyFunction(token.getValue(), operand);
+                    operandStack.push(result);
                 }
-                double operand = operandStack.pop();
-                double result = applyFunction(token.getValue(), operand);
-                operandStack.push(result);
             } else {
                 throw new ExpressionException("Tipo de token inesperado na avaliação pós-fixada: " + token.getType());
             }
@@ -129,7 +143,7 @@ public class PostfixEvaluator {
             default: throw new ExpressionException("Função desconhecida: " + functionName);
         }
     }
-    private double apllyStatistic (String functionName, List<Double> numbers)throws ExpressionException{
+    private double applyStatistic (String functionName, List<Double> numbers)throws ExpressionException{
        switch(functionName.toLowerCase()){
             case "mean":
             if(numbers.isEmpty()){

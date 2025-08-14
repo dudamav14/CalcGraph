@@ -30,6 +30,7 @@ import javafx.scene.layout.HBox;
 import javafx.geometry.Insets;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableRow;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
 
@@ -46,6 +47,10 @@ public class CalculatorController {
 
     @FXML
     private Label errorMessageLabel; // Label para exibir mensagens de erro na UI
+    
+    @FXML
+    private Label errorMessageLabelGrafico; // Label para exibir mensagens de erro na UI
+
 
     
     @FXML
@@ -335,12 +340,27 @@ public class CalculatorController {
     private Button btnSelectComparisonGraph;
     @FXML
     private GridPane smallCalculatorPane;
-    
+    @FXML
+    private TextField selectedFunctionField;
+ 
     @FXML
     private void handleAddFunctionField() {
-        TextField newField = new TextField();
-        newField.setPromptText("Digite a função (ex: x^2)");
-        functionInputsBox.getChildren().add(functionInputsBox.getChildren().size() - 1, newField);
+        HBox fieldBox = new HBox(5);
+
+        Button favButton = new Button("☆");
+        favButton.setOnAction(e -> toggleFavorite(favButton));
+
+        TextField tf = new TextField();
+        tf.setPromptText("Digite a função");
+        tf.setOnMouseClicked(this::handleFunctionFieldClick);
+
+        Button removeBtn = new Button("X");
+        removeBtn.setOnAction(e -> functionInputsBox.getChildren().remove(fieldBox));
+
+        fieldBox.getChildren().addAll(favButton, tf, removeBtn);
+
+        // Adiciona antes do botão "+"
+        functionInputsBox.getChildren().add(functionInputsBox.getChildren().size() - 1, fieldBox);
     }
 
     @FXML
@@ -352,5 +372,161 @@ public class CalculatorController {
     private void plotFunctionOnPane(Pane pane, String function) {
         // TODO: implementar renderização
     }
+    
+    @FXML
+    private void handleFunctionFieldClick(MouseEvent event) {
+        selectedFunctionField = (TextField) event.getSource();
+    }
+    
+    @FXML
+    private void handleRemoveFunctionField(ActionEvent e) {
+        Button btn = (Button) e.getSource();
+        HBox parent = (HBox) btn.getParent();
+        functionInputsBox.getChildren().remove(parent);
+    }
 
+    @FXML
+    private void handleToggleFavorite(ActionEvent e) {
+        Button btn = (Button) e.getSource();
+        toggleFavorite(btn);
+    }
+    
+    private void toggleFavorite(Button btn) {
+        if ("☆".equals(btn.getText())) {
+            btn.setText("★");
+            // adicionar à lista de favoritos
+        } else {
+            btn.setText("☆");
+            // remover dos favoritos
+        }
+    }
+    
+    private void insertTextToSelectedField(String text) {
+        if (selectedFunctionField != null) {
+            selectedFunctionField.setText(selectedFunctionField.getText() + text);
+        }
+    }
+    
+    // Calculadora da parte gráfica
+    
+    @FXML
+    private void handleGraphNumber(ActionEvent event) {
+        if (selectedFunctionField != null) {
+            restoreInputFormat();
+            String number = ((Button) event.getSource()).getText();
+            insertTextToSelectedField(number);
+            errorMessageLabelGrafico.setText("");
+        }
+    }
+
+    @FXML
+    private void handleGraphOperator(ActionEvent event) {
+        if (selectedFunctionField != null) {
+            restoreInputFormat();
+            String operator = ((Button) event.getSource()).getText();
+            insertTextToSelectedField(operator);
+            errorMessageLabelGrafico.setText("");
+        }
+    }
+
+    @FXML
+    private void handleGraphDecimal(ActionEvent event) {
+        if (selectedFunctionField != null) {
+            restoreInputFormat();
+            String decimal = ((Button) event.getSource()).getText();
+            insertTextToSelectedField(decimal);
+            errorMessageLabelGrafico.setText("");
+        }
+    }
+
+    @FXML
+    private void handleGraphFunction(ActionEvent event) {
+        if (selectedFunctionField != null) {
+            restoreInputFormat();
+            String function = ((Button) event.getSource()).getText();
+            insertTextToSelectedField(function + "(");
+            errorMessageLabelGrafico.setText("");
+        }
+    }
+
+    @FXML
+    private void handleGraphConstant(ActionEvent event) {
+        if (selectedFunctionField != null) {
+            restoreInputFormat();
+            String constant = ((Button) event.getSource()).getText();
+            insertTextToSelectedField(constant);
+            errorMessageLabelGrafico.setText("");
+        }
+    }
+
+    @FXML
+    private void handleGraphParenthesis(ActionEvent event) {
+        if (selectedFunctionField != null) {
+            restoreInputFormat();
+            String parenthesis = ((Button) event.getSource()).getText();
+            insertTextToSelectedField(parenthesis);
+            errorMessageLabelGrafico.setText("");
+        }
+    }
+
+    @FXML
+    private void handleGraphClear(ActionEvent event) {
+        if (selectedFunctionField != null) {
+            selectedFunctionField.clear();
+            errorMessageLabelGrafico.setText("");
+        }
+    }
+
+    @FXML
+    private void handleGraphDelete(ActionEvent event) {
+        if (selectedFunctionField != null) {
+            restoreInputFormat();
+            String currentText = selectedFunctionField.getText();
+            if (!currentText.isEmpty()) {
+                selectedFunctionField.setText(currentText.substring(0, currentText.length() - 1));
+            }
+            errorMessageLabelGrafico.setText("");
+        }
+    }
+    
+    private void restoreInputFormat(){
+        String text = selectedFunctionField.getText();
+        if(selectedFunctionField != null){
+            if(selectedFunctionField.getText().contains("=")){
+                int idx = text.indexOf('=');
+                selectedFunctionField.setText(text.substring(0, idx-1));
+            }
+        }
+    }
+
+
+    @FXML
+    private void handleGraphEquals(ActionEvent event) {
+        if (selectedFunctionField != null) {
+            restoreInputFormat();
+            String expression = selectedFunctionField.getText();
+            try {
+                double result = AnalisadorDeExpressoes.avaliarExpressao(expression);
+                String resultText = decimalFormat.format(result);
+
+                selectedFunctionField.setText(expression + " = " + resultText);
+
+                // salvar no histórico
+                try {
+                    calcgraph.model.Expressao e = service.registrarExpressao(expression, resultText, 0);
+                    lastExpressaoId = e.getId();
+                } catch (Exception dbEx) {
+                    System.err.println("Falha ao salvar histórico: " + dbEx.getMessage());
+                }
+
+            } catch (ExpressionException e) {
+                errorMessageLabelGrafico.setText("Erro: " + e.getMessage());
+                System.err.println("Erro na expressãoDD (UI): " + e.getMessage());
+            } catch (Exception e) {
+                errorMessageLabelGrafico.setText("Erro Inesperado. Verifique o console.");
+                System.err.println("Ocorreu um erro inesperado (UI): " + e.getMessage());
+                e.printStackTrace();
+            }
+        } 
+    }
 }

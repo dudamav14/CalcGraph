@@ -5,5 +5,6 @@ public enum TokenType {
     OPERATOR,       // Operadores (+, -, *, /, ^)
     FUNCTION,       // Funções (sin, cos, log, etc.)
     PARENTHESIS,    // Parênteses (abertura e fechamento)
-    CONSTANT        // Constantes (pi, e)
+    CONSTANT,        // Constantes (pi, e)
+    SEPARATOR       // Separador para separar os elementos de lista (,)
 }
