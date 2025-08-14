@@ -1,6 +1,33 @@
-# Ignora arquivos de projeto do NetBeans
-/nbproject/
+# ---- Java
+*.class
+*.log
+hs_err_pid*
+replay_pid*
 
-# Ignora a pasta de build
-/build/
-/dist/
+# ---- OS
+.DS_Store
+Thumbs.db
+
+# ---- NetBeans / Ant (somente gerados)
+build/
+dist/
+nbbuild/
+nbdist/
+
+# Gerados pelo NetBeans (não versionar)
+nbproject/private/
+nbproject/build-impl.xml
+nbproject/genfiles.properties
+nbproject/jfx-impl.xml
+nbproject/configs/
+nbproject/private/configs/
+nbproject/private/private.xml
+nbproject/private/retriever/
+
+# ---- IDEs
+*.iml
+.idea/
+.vscode/
+
+# ---- (opcional) impedir credenciais locais
+src/META-INF/persistence.xml
