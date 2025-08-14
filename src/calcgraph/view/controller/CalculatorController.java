@@ -287,7 +287,7 @@ public class CalculatorController {
             try {
                 service.removerExpressao(sel.getId());
                 loadHistoryIntoTable();
-                errorMessageLabel.setText("Item removido do histórico.");
+                errorMessageLabel.setText("Item "+ sel.getEntrada()+" removido do histórico.");
             } catch (Exception ex) {
                 errorMessageLabel.setText("Falha ao remover (veja o console).");
                 ex.printStackTrace();
@@ -313,15 +313,16 @@ public class CalculatorController {
     }
     
     private void loadHistoryIntoTable() {
-    try {
-        List<Expressao> list = service.historico(500); // ajuste o limite se quiser
-        historyTable.getItems().setAll(list);
-    } catch (Exception ex) {
-        System.err.println("Falha ao carregar histórico: " + ex.getMessage());
+        try {
+            List<Expressao> list = service.historico(500); // ajuste o limite se quiser
+            historyTable.getItems().setAll(list);
+        } catch (Exception ex) {
+            System.err.println("Falha ao carregar histórico: " + ex.getMessage());
+        }
     }
-}
-
-
+    
+    // GRÁFICO
+    
     
 
 }

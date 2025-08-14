@@ -30,4 +30,4 @@ nbproject/private/retriever/
 .vscode/
 
 # ---- (opcional) impedir credenciais locais
-src/META-INF/persistence.xml
+#src/META-INF/persistence.xml
