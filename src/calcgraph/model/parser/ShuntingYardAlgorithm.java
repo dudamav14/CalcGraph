@@ -21,7 +21,7 @@ public class ShuntingYardAlgorithm {
      * @return Uma lista de tokens na notação pós-fixada.
      * @throws ExpressionException Se houver um erro durante a conversão (ex: parênteses desbalanceados).
      */
-    public List<Token> convertToPostfix(List<Token> infixTokens) {
+    public List<Token> convertToPostfix(List<Token> infixTokens) { // entender convertoposfix
         List<Token> outputQueue = new ArrayList<>();
         Stack<Token> operatorStack = new Stack<>();
 
