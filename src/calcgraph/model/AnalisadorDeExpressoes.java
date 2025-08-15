@@ -58,6 +58,7 @@ public class AnalisadorDeExpressoes {
 
         try {
             infixTokensPreProcessed = parser.tokenize(expressao); 
+            System.out.println("Tokens Infixos (Sem validação): " + infixTokensPreProcessed);
             parser.validateTokenSequence(infixTokensPreProcessed);
             postfixTokens = shuntingYard.convertToPostfix(infixTokensPreProcessed);
 

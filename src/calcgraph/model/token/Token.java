@@ -7,10 +7,18 @@ package calcgraph.model.token;
 public abstract class Token {
     private final TokenType type;
     private final String value;
+    private int arguments;
 
     public Token(TokenType type, String value) {
         this.type = type;
         this.value = value;
+        this.arguments=1;
+    }
+    
+    public Token(TokenType type, String value, int arguments){
+        this.type = type;
+        this.value = value;
+        this.arguments = arguments;
     }
 
     public TokenType getType() {
@@ -20,12 +28,21 @@ public abstract class Token {
     public String getValue() {
         return value;
     }
+    
+    public int getArguments() {
+        return arguments;
+    }
+    
+    public void setArguments(int arguments){
+        this.arguments = arguments;
+    }
 
     @Override
     public String toString() {
         return "Token{" +
                "type=" + type +
                ", value='" + value + '\'' +
+                ", arguments='" + arguments + '\'' +
                '}';
     }
 }

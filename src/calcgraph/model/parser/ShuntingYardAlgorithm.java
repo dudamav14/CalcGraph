@@ -24,6 +24,9 @@ public class ShuntingYardAlgorithm {
     public List<Token> convertToPostfix(List<Token> infixTokens) { // entender convertoposfix
         List<Token> outputQueue = new ArrayList<>();
         Stack<Token> operatorStack = new Stack<>();
+        Stack<Integer> counterStack = new Stack<>();
+
+        
 
         for (Token token : infixTokens) {
             TokenType type = token.getType();
@@ -36,8 +39,12 @@ public class ShuntingYardAlgorithm {
                     break;
                 case FUNCTION:
                     operatorStack.push(token);
+                    counterStack.add(1);
                     break;
                 case SEPARATOR: 
+                    if(!counterStack.isEmpty()){
+                        counterStack.add(counterStack.pop()+1);
+                    }
                     while (!operatorStack.isEmpty() && !operatorStack.peek().getValue().equals("(")) {
                         outputQueue.add(operatorStack.pop());
                     }
@@ -60,6 +67,9 @@ public class ShuntingYardAlgorithm {
                     break;
                 case PARENTHESIS:
                     if (value.equals("(")) {
+                        /*if (operatorStack.peek().getType() == TokenType.FUNCTION){ // Se for funcao, adiciona um token ,;;;;
+                            operatorStack.push(new Token(TokenType.SEPARATOR, ",") {});
+                        }*/
                         operatorStack.push(token);
                     } else { // value.equals(")")
                         while (!operatorStack.isEmpty() && !operatorStack.peek().getValue().equals("(")) {
@@ -71,7 +81,9 @@ public class ShuntingYardAlgorithm {
                         operatorStack.pop(); // Pop the left parenthesis
                         // Se o topo da pilha é uma função, joga para a fila de saída (funções são prefixas)
                         if (!operatorStack.isEmpty() && operatorStack.peek().getType() == TokenType.FUNCTION) {
-                            outputQueue.add(operatorStack.pop());
+                            Token tk = operatorStack.pop();
+                            tk.setArguments(counterStack.pop());
+                            outputQueue.add(tk);
                         }
                     }
                     break;

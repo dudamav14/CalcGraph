@@ -31,23 +31,22 @@ public class PostfixEvaluator {
     
     public double evaluate(List<Token> postfixTokens) {
         Stack<Double> operandStack = new Stack<>();
-        int count = 0;
 
         for (Token token : postfixTokens) {
             if (token.getType() == TokenType.NUMBER) {
                 try {
                     operandStack.push(Double.parseDouble(token.getValue()));
-                    count++;
+                    
                 } catch (NumberFormatException e) {
                     throw new ExpressionException("Número inválido: " + token.getValue(), e);
                 }
             } else if (token.getType() == TokenType.CONSTANT) { 
                 if (token.getValue().equalsIgnoreCase("pi")) {
                     operandStack.push(Math.PI);
-                    count++;
+                    
                 } else if (token.getValue().equalsIgnoreCase("e")) {
                     operandStack.push(Math.E);
-                    count++;
+                    
                 } else {
                     throw new ExpressionException("Constante desconhecida: " + token.getValue());
                 }
@@ -67,26 +66,18 @@ public class PostfixEvaluator {
                 double operand1 = operandStack.pop();
                 double result = applyOperator(token.getValue(), operand1, operand2);
                 operandStack.push(result);
-                count--;
+                
             } else if (token.getType() == TokenType.FUNCTION) {
                 String functionName = token.getValue().toLowerCase();
-                
-                System.out.println("\n\nTokens: "+postfixTokens);
-                System.out.println("Achou uma função: "+functionName+"");
-                System.out.println("OperandStack: "+operandStack);
                 
                 if (isMultiArgumentFunction(functionName)) {
                     List<Double> arguments = new ArrayList<>();
                     // Enquanto a pilha não estiver vazia, desempilha e adiciona à lista
-                    if(count==0){
-                        while(!operandStack.isEmpty()){
-                            arguments.add(operandStack.pop());
-                        }
-                    }
-                    for (int i=0; i<count; i++) { // Parar ao achar um parenteses de fechamento, para resolver a funcao primeiro
+                    
+                    for(int i=0; i<token.getArguments();i++){
                         arguments.add(operandStack.pop());
                     }
-                    count=0;
+             
                     // A lista de argumentos está na ordem inversa, então vamos reverter
                     Collections.reverse(arguments);
                     double result = applyStatistic(functionName, arguments);
@@ -100,9 +91,7 @@ public class PostfixEvaluator {
                     operandStack.push(result);
                 }
                 //mean(mode(1,4,4,6,3),mode(4,5,6,6,7))
-                System.out.println(" ----------- REALIZANDO OPERACOES ----------- ");
-                System.out.println("OperandStack: "+operandStack);
-                System.out.println("Tokens: "+postfixTokens);
+               
             } else {
                 throw new ExpressionException("Tipo de token inesperado na avaliação pós-fixada: " + token.getType());
             }
