@@ -47,9 +47,7 @@ public class ExpressionParser {
 
             String tokenValue = matcher.group();
             TokenType tokenType = TokenType.NUMBER; 
-            System.out.println("Token: "+tokenValue);
             if (tokenValue.matches(NUMBER_REGEX)) {
-                System.out.println("Token: "+tokenValue+" | Entrou como número");
                 tokenType = TokenType.NUMBER;
             } else if (tokenValue.matches(OPERATOR_REGEX)) {
                

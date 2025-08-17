@@ -153,7 +153,7 @@
                                     <Label text="Gráfico Principal"/>
                                     <Pane fx:id="mainGraphPane" prefWidth="300" prefHeight="200" style="-fx-background-color: white; -fx-border-color: black;"/>
                                     <Label text="Legenda:"/>
-                                    <ListView fx:id="mainGraphLegend" prefHeight="60"/>
+                                    <ListView fx:id="mainGraphLegend" prefHeight="80"/>
                                 </VBox>
 
                                 <!-- Gráfico de comparação -->
@@ -164,7 +164,7 @@
                                         <Button fx:id="btnSelectComparisonGraph" text="Selecionar gráfico" onAction="#handleSelectComparisonGraph"/>
                                     </StackPane>
                                     <Label text="Legenda:"/>
-                                    <ListView fx:id="comparisonGraphLegend" prefHeight="60"/>
+                                    <ListView fx:id="comparisonGraphLegend" prefHeight="80"/>
                                 </VBox>
                             </HBox>
                         </HBox>

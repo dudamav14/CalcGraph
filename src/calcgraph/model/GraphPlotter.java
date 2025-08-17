@@ -2,6 +2,9 @@ package calcgraph.model;
 
 import calcgraph.model.evaluator.FunctionEvaluator;
 import calcgraph.model.exception.ExpressionException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -32,7 +35,7 @@ public class GraphPlotter {
     private FunctionEvaluator currentEvaluator;
     
     // Variáveis para o zoom e arrasto
-    private static final double ZOOM_FACTOR = 2; // Aumentar este valor para um zoom mais forte
+    private static final double ZOOM_FACTOR = 1.1; // Aumentar este valor para um zoom mais forte
     private double mousePressX;
     private double mousePressY;
     private double dragLastX;
@@ -279,5 +282,45 @@ public class GraphPlotter {
     private void addToLegend(String function) {
         legendListView.getItems().clear(); // Limpa a legenda antes de adicionar
         legendListView.getItems().add("f(x) = " + function);
+         List<String> results = new ArrayList<>();
+        results = calcularRaizes(function);
+        if(results.isEmpty()){
+            legendListView.getItems().add("Raizes de f(x) = [Não possuem]");
+        }else{
+            legendListView.getItems().add("Raizes de f(x) = "+results);
+        }
+        
+    }
+    private List<String> calcularRaizes(String function){
+        String regex = "^\\s*" +
+               "([+-]?\\s*\\d*\\.?\\d*\\*?x(\\^2)?)?" + // termo x^2 ou x
+               "(\\s*[+-]\\s*\\d*\\.?\\d*\\*?x(\\^2)?)?" + // possível segundo termo x^2 ou x
+               "(\\s*[+-]\\s*\\d+\\.?\\d*)?" + // constante opcional com operador
+               "\\s*$";
+
+
+         List<String> results = new ArrayList<>();
+        double a;
+        double b;
+        double c;
+        if(Pattern.matches(regex, function)){
+            System.out.println("Função: "+function);
+            QuadraticExpressionClassifier classifier = new QuadraticExpressionClassifier(function);
+             a = classifier.getA();
+             b = classifier.getB();
+             c = classifier.getC();
+             
+             System.out.println("a:"+a + " | b:"+b + " | c:"+c);
+             
+             double dt = (b*b)-4*a*c;
+             if(dt<0) return results;
+             results.add(Double.toString((-b+Math.sqrt(dt))/2*a));
+             results.add(Double.toString((-b-Math.sqrt(dt))/2*a));
+
+        }else{
+            results.add("Não há suporte.");
+        }
+        
+        return results;
     }
 }
