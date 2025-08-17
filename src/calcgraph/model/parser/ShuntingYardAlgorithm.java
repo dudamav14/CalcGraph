@@ -34,6 +34,7 @@ public class ShuntingYardAlgorithm {
 
             switch (type) {
                 case NUMBER:
+                case VARIABLE:
                 case CONSTANT: // *** CORREÇÃO AQUI: Tratar CONSTANT como um operando ***
                     outputQueue.add(token);
                     break;

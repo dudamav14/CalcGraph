@@ -19,13 +19,16 @@ public class ExpressionParser {
     private static final String PARENTHESIS_REGEX = "[()]";
     private static final String FUNCTION_CONSTANT_REGEX = "[a-zA-Z]+";
     private static final String SEPARATOR_REGEX = ",";
+    private static final String VARIABLE_REGEX = "[xX]";
+
 
     private static final Pattern TOKEN_PATTERN = Pattern.compile(
             NUMBER_REGEX + "|" +
             OPERATOR_REGEX + "|" +
             PARENTHESIS_REGEX + "|" +
             FUNCTION_CONSTANT_REGEX + "|" +
-            SEPARATOR_REGEX
+            SEPARATOR_REGEX + "|" +
+            VARIABLE_REGEX 
     );
 
     
@@ -44,8 +47,9 @@ public class ExpressionParser {
 
             String tokenValue = matcher.group();
             TokenType tokenType = TokenType.NUMBER; 
-
+            System.out.println("Token: "+tokenValue);
             if (tokenValue.matches(NUMBER_REGEX)) {
+                System.out.println("Token: "+tokenValue+" | Entrou como número");
                 tokenType = TokenType.NUMBER;
             } else if (tokenValue.matches(OPERATOR_REGEX)) {
                
@@ -60,6 +64,8 @@ public class ExpressionParser {
                 }
             } else if (tokenValue.matches(PARENTHESIS_REGEX)) {
                 tokenType = TokenType.PARENTHESIS;
+            }else if (tokenValue.matches(VARIABLE_REGEX)) {
+                tokenType = TokenType.VARIABLE;
             }else if (tokenValue.equals(",")) { 
                 tokenType = TokenType.SEPARATOR;
             } else if (tokenValue.matches(FUNCTION_CONSTANT_REGEX)) {

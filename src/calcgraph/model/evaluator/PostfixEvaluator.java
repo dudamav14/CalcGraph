@@ -33,7 +33,7 @@ public class PostfixEvaluator {
         Stack<Double> operandStack = new Stack<>();
 
         for (Token token : postfixTokens) {
-            if (token.getType() == TokenType.NUMBER) {
+            if (token.getType() == TokenType.NUMBER || token.getType() == TokenType.VARIABLE) {
                 try {
                     operandStack.push(Double.parseDouble(token.getValue()));
                     
