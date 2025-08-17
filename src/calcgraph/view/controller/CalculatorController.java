@@ -532,10 +532,14 @@ public class CalculatorController {
                     }
                }else if (resultado.getTipo() == ResultadoAvaliacao.TipoResultado.GRAFICO) {
                 // Se for um resultado de gráfico, plota a função
-                    String funcaoString = resultado.getFuncao();
-                    // Assumindo que você tem um método para plotar o gráfico na sua UI
-                    
+                    String funcaoString = resultado.getFuncao(); 
                     graphPlotter.plotGraph(funcaoString); 
+                    try {
+                        calcgraph.model.Expressao e = service.registrarExpressao(expression, "Gráfico gerado", 0);
+                        lastExpressaoId = e.getId();
+                    } catch (Exception dbEx) {
+                        System.err.println("Falha ao salvar histórico: " + dbEx.getMessage());
+                    }
                 }
 
             } catch (ExpressionException e) {

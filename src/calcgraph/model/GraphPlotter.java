@@ -193,9 +193,12 @@ public class GraphPlotter {
         Line tick = new Line(xPane, yAxisCenter - 5, xPane, yAxisCenter + 5);
         tick.setStroke(Color.GRAY);
         graphPane.getChildren().add(tick);
-
         if (Math.abs(value) > 0.0001) { // Evita desenhar o rótulo "0" duas vezes
-            Text label = new Text(String.format("%.2f", value));
+            String tam = "%.2f";
+            if((xMax-xMin) < 0.08){
+                tam="%.3f";
+            }
+            Text label = new Text(String.format(tam, value));
             label.setFont(new Font(8));
             label.setLayoutX(xPane - label.getLayoutBounds().getWidth() / 2);
             label.setLayoutY(yAxisCenter + 20); // Posição abaixo do eixo
@@ -215,7 +218,11 @@ public class GraphPlotter {
         graphPane.getChildren().add(tick);
 
         if (Math.abs(value) > 0.0001) {
-            Text label = new Text(String.format("%.2f", value));
+            String tam = "%.2f";
+            if((yMax-yMin) < 0.08){
+                tam="%.3f";
+            }
+            Text label = new Text(String.format(tam, value));
             label.setFont(new Font(8));
             label.setLayoutX(xAxisCenter - 25); // Posição à esquerda do eixo
             label.setLayoutY(yPane + label.getLayoutBounds().getHeight() / 4);
