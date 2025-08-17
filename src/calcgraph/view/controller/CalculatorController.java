@@ -2,8 +2,10 @@ package calcgraph.view.controller;
 
 import calcgraph.service.CalcService;
 import calcgraph.model.Expressao;
+import calcgraph.model.ResultadoAvaliacao;
 
 import calcgraph.model.AnalisadorDeExpressoes;
+import calcgraph.model.GraphPlotter;
 import calcgraph.model.exception.ExpressionException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -83,7 +85,7 @@ public class CalculatorController {
         display.requestFocus();
         showModePane(calculationModePane);
         updateModeButtonStyles(btnModeCalculation);
-
+        graphPlotter = new GraphPlotter(mainGraphPane, mainGraphLegend);
         service = new CalcService();
         lastExpressaoId = null;
     }
@@ -190,15 +192,21 @@ public class CalculatorController {
     private void handleEquals(ActionEvent event) {
         String expression = display.getText();
         try {
-            double result = AnalisadorDeExpressoes.avaliarExpressao(expression);
-            String resultText = decimalFormat.format(result);
+            
+            ResultadoAvaliacao result = AnalisadorDeExpressoes.avaliarExpressao(expression);
+            if (result.getTipo() == ResultadoAvaliacao.TipoResultado.NUMERICO) {
+                System.out.println(result);
+                String resultText = decimalFormat.format(result.getValor());
 
-            display.setText(resultText);
-            errorMessageLabel.setText("");
+                display.setText(resultText);
+                errorMessageLabel.setText("");
+            }else if (result.getTipo() == ResultadoAvaliacao.TipoResultado.GRAFICO) {
+                errorMessageLabel.setText("Variáveis só podem ser calculadas no modo gráfico.");
+            }
 
             // salvar no histórico
             try {
-                calcgraph.model.Expressao e = service.registrarExpressao(expression, resultText, 0);
+                calcgraph.model.Expressao e = service.registrarExpressao(expression, decimalFormat.format(result.getValor()), 0);
                 lastExpressaoId = e.getId();
             } catch (Exception dbEx) {
                 System.err.println("Falha ao salvar histórico: " + dbEx.getMessage());
@@ -498,7 +506,8 @@ public class CalculatorController {
             }
         }
     }
-
+    
+    private GraphPlotter graphPlotter;
 
     @FXML
     private void handleGraphEquals(ActionEvent event) {
@@ -506,17 +515,27 @@ public class CalculatorController {
             restoreInputFormat();
             String expression = selectedFunctionField.getText();
             try {
-                double result = AnalisadorDeExpressoes.avaliarExpressao(expression);
-                String resultText = decimalFormat.format(result);
+                ResultadoAvaliacao resultado = AnalisadorDeExpressoes.avaliarExpressao(expression);
+                
+                if (resultado.getTipo() == ResultadoAvaliacao.TipoResultado.NUMERICO) {
+                    double resultValue = resultado.getValor();
+                    String resultText = decimalFormat.format(resultValue);
 
-                selectedFunctionField.setText(expression + " = " + resultText);
+                    selectedFunctionField.setText(expression + " = " + resultText);
 
-                // salvar no histórico
-                try {
-                    calcgraph.model.Expressao e = service.registrarExpressao(expression, resultText, 0);
-                    lastExpressaoId = e.getId();
-                } catch (Exception dbEx) {
-                    System.err.println("Falha ao salvar histórico: " + dbEx.getMessage());
+                    // salvar no histórico
+                    try {
+                        calcgraph.model.Expressao e = service.registrarExpressao(expression, resultText, 0);
+                        lastExpressaoId = e.getId();
+                    } catch (Exception dbEx) {
+                        System.err.println("Falha ao salvar histórico: " + dbEx.getMessage());
+                    }
+               }else if (resultado.getTipo() == ResultadoAvaliacao.TipoResultado.GRAFICO) {
+                // Se for um resultado de gráfico, plota a função
+                    String funcaoString = resultado.getFuncao();
+                    // Assumindo que você tem um método para plotar o gráfico na sua UI
+                    
+                    graphPlotter.plotGraph(funcaoString); 
                 }
 
             } catch (ExpressionException e) {

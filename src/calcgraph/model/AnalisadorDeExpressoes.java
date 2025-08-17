@@ -43,11 +43,17 @@ public class AnalisadorDeExpressoes {
     }
 
    
-    public static double avaliarExpressao(String expressao) {
+    public static ResultadoAvaliacao  avaliarExpressao(String expressao) {
+        
+        if (expressao.contains("x")) {
+        // É uma função. Retorna um objeto do tipo GRAFICO com a expressão.
+            return new ResultadoAvaliacao(expressao);
+        }
+        
         if (!validarExpressaoPreliminar(expressao)) {
             throw new ExpressionException("Expressão inválida: Parênteses desbalanceados ou vazia.");
         }
-
+        
         ExpressionParser parser = new ExpressionParser();
         ShuntingYardAlgorithm shuntingYard = new ShuntingYardAlgorithm();
         PostfixEvaluator evaluator = new PostfixEvaluator();
@@ -73,6 +79,6 @@ public class AnalisadorDeExpressoes {
             throw new ExpressionException("Erro inesperado ao avaliar a expressão: " + e.getMessage(), e);
         }
 
-        return result;
+        return new ResultadoAvaliacao(result);
     }
 }

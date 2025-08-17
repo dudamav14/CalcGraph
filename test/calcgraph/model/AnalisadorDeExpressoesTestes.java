@@ -67,24 +67,24 @@ public class AnalisadorDeExpressoesTestes {
     public void testarAvaliarExpressao_SomaSimples() {
         // Testa uma expressão simples e o resultado da avaliação.
         String expressao = "5 + 3";
-        double resultado = AnalisadorDeExpressoes.avaliarExpressao(expressao);
-        assertEquals(8.0, resultado, 0.0001);
+        ResultadoAvaliacao resultado = AnalisadorDeExpressoes.avaliarExpressao(expressao);
+        assertEquals(8.0, (Double) resultado.getValor(), 0.0001);
     }
     
     @Test
     public void testarAvaliarExpressao_ComPrecedencia() {
         // Testa uma expressão que exige a correta precedência de operadores.
         String expressao = "2 + 3 * 4";
-        double resultado = AnalisadorDeExpressoes.avaliarExpressao(expressao);
-        assertEquals(14.0, resultado, 0.0001);
+        ResultadoAvaliacao resultado = AnalisadorDeExpressoes.avaliarExpressao(expressao);
+        assertEquals(14.0, (Double) resultado.getValor(), 0.0001);
     }
 
     @Test
     public void testarAvaliarExpressao_ComParenteses() {
         // Testa uma expressão com parênteses.
         String expressao = "(2 + 3) * 4";
-        double resultado = AnalisadorDeExpressoes.avaliarExpressao(expressao);
-        assertEquals(20.0, resultado, 0.0001);
+        ResultadoAvaliacao resultado = AnalisadorDeExpressoes.avaliarExpressao(expressao);
+        assertEquals(20.0, (Double) resultado.getValor(), 0.0001);
     }
     
     @Test(expected = ExpressionException.class)
