@@ -26,7 +26,9 @@ public class PostfixEvaluator {
                functionName.equals("mode") ||
                functionName.equals("median") ||
                functionName.equals("variance") ||
-               functionName.equals("standarddeviation");
+               functionName.equals("standarddeviation") ||
+               functionName.equals("hipotesez") ||
+               functionName.equals("hipoteset");
     }
     
     public double evaluate(List<Token> postfixTokens) {
@@ -267,6 +269,69 @@ public class PostfixEvaluator {
                 variance = squaredDifferencesSumStdDev / numbers.size();
 
                 return Math.sqrt(variance);
+            
+            case "hipotesez":
+                //Parametros Passo a Passo
+                //desvioPadraoPopulacao, tamanhoAmostra, mediaAmostra, mediaPopulacaoHipotese
+                if(numbers.size() < 3){
+                    throw new ExpressionException("Para calcular a Hipótese Z, a lista deve ter pelo menos 3 elementos: [média_populacional, desvio_padrao_populacional, dados_amostrais...]");
+                }
+                
+                double mediaPopulacaoHipotese = numbers.get(0);
+                double desvioPadraoPopulacao = numbers.get(1);
+                List<Double> dadosAmostra = numbers.subList(2, numbers.size());
+                
+                if(dadosAmostra.isEmpty()){
+                    throw new ExpressionException("A amostra de dados não pode estar vazia.");
+                }
+                
+                double somaAmostra = 0.0;
+                for (double numero : dadosAmostra) {
+                    somaAmostra += numero;
+                }
+                double mediaAmostra = somaAmostra / dadosAmostra.size();
+                int tamanhoAmostra = dadosAmostra.size();
+
+                // Aplicando a fórmula do Teste Z: (média_amostra - média_populacional) / (desvio_padrão_populacional / sqrt(tamanho_amostra))
+                double erroPadrao = desvioPadraoPopulacao / Math.sqrt(tamanhoAmostra);
+                return (mediaAmostra - mediaPopulacaoHipotese) / erroPadrao;
+                
+             case "hipoteset":
+                if (numbers.size() < 2) {
+                    throw new ExpressionException("Para calcular a Hipótese T, a lista deve ter pelo menos 2 elementos: [média_populacional, dados_amostrais...]");
+                }
+                
+                // O primeiro elemento é a média populacional hipotética
+                double mediaPopulacaoHipoteseT = numbers.get(0);
+                
+                // O restante da lista são os dados da amostra
+                List<Double> dadosAmostraT = numbers.subList(1, numbers.size());
+
+                if (dadosAmostraT.size() < 2) {
+                    throw new ExpressionException("O tamanho da amostra deve ser no mínimo 2 para calcular o desvio padrão.");
+                }
+
+                // Passo 1: Calcular a média da amostra
+                double somaAmostraT = 0.0;
+                for (double numero : dadosAmostraT) {
+                    somaAmostraT += numero;
+                }
+                double mediaAmostraT = somaAmostraT / dadosAmostraT.size();
+                int tamanhoAmostraT = dadosAmostraT.size();
+
+                // Passo 2: Calcular o desvio padrão da amostra (s)
+                double somaDiferencasQuadradasT = 0.0;
+                for (double numero : dadosAmostraT) {
+                    double diferenca = numero - mediaAmostraT;
+                    somaDiferencasQuadradasT += diferenca * diferenca;
+                }
+                // Divisão por n-1 para o desvio padrão amostral
+                double desvioPadraoAmostra = Math.sqrt(somaDiferencasQuadradasT / (tamanhoAmostraT - 1));
+
+                // Passo 3: Aplicar a fórmula do Teste t
+                double erroPadraoT = desvioPadraoAmostra / Math.sqrt(tamanhoAmostraT);
+                return (mediaAmostraT - mediaPopulacaoHipoteseT) / erroPadraoT;
+
             default:
                 throw new ExpressionException("Função estatística desconhecida: " + functionName);
        }    
