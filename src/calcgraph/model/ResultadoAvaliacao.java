@@ -14,6 +14,14 @@ public class ResultadoAvaliacao {
     private Double valor;
     private String funcao;
 
+    boolean isGrafico() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    Object getExpressao() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
     public enum TipoResultado {
         NUMERICO,
         GRAFICO

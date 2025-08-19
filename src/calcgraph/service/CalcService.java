@@ -9,8 +9,21 @@ import java.util.List;
 import java.util.Optional;
 
 public class CalcService {
-    private final ExpressaoRepository expRepo = new ExpressaoRepository();
-    private final FavoritoRepository favRepo = new FavoritoRepository();
+
+    private final ExpressaoRepository expRepo;
+    private final FavoritoRepository favRepo;
+
+    // Construtor para uso em produção
+    public CalcService() {
+        this.expRepo = new ExpressaoRepository();
+        this.favRepo = new FavoritoRepository();
+    }
+    
+    // Construtor para testes, permitindo injeção de dependências
+    public CalcService(ExpressaoRepository expRepo, FavoritoRepository favRepo) {
+        this.expRepo = expRepo;
+        this.favRepo = favRepo;
+    }
 
     /** Registra uma expressão no histórico */
     public Expressao registrarExpressao(String entrada, String resultado, int qtdVars) {

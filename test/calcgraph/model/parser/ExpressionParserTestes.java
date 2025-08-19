@@ -118,7 +118,62 @@ public class ExpressionParserTestes {
         assertEquals(TokenType.PARENTHESIS, tokens.get(8).getType());
         assertEquals(")", tokens.get(8).getValue());
     }
+    
+    // --- Novos testes para o método tokenize ---
+    
+    @Test
+    public void testTokenize_ExpressionWithVariable() {
+        String expression = "x^2 + 2x - 1";
+        List<Token> tokens = parser.tokenize(expression);
+        assertEquals(7, tokens.size());
+        assertEquals(TokenType.VARIABLE, tokens.get(0).getType());
+        assertEquals("x", tokens.get(0).getValue());
+    }
 
+    @Test
+    public void testTokenize_ExpressionWithDecimalNumber() {
+        String expression = "3.14 + 1.5";
+        List<Token> tokens = parser.tokenize(expression);
+        assertEquals(3, tokens.size());
+        assertEquals(TokenType.NUMBER, tokens.get(0).getType());
+        assertEquals("3.14", tokens.get(0).getValue());
+        assertEquals(TokenType.NUMBER, tokens.get(2).getType());
+        assertEquals("1.5", tokens.get(2).getValue());
+    }
+
+    @Test
+    public void testTokenize_ExpressionWithUnaryMinus_CorrectSize() {
+        String expression = "-5 + 2";
+        List<Token> tokens = parser.tokenize(expression);
+        assertEquals(5, tokens.size());
+    }
+
+    @Test
+    public void testTokenize_ExpressionWithUnaryMinus_Tokens() {
+        String expression = "-5 + 2";
+        List<Token> tokens = parser.tokenize(expression);
+        assertEquals(TokenType.PARENTHESIS, tokens.get(0).getType());
+        assertEquals("(", tokens.get(0).getValue());
+        assertEquals(TokenType.NUMBER, tokens.get(1).getType());
+        assertEquals("0", tokens.get(1).getValue());
+        assertEquals(TokenType.OPERATOR, tokens.get(2).getType());
+        assertEquals("-", tokens.get(2).getValue());
+        assertEquals(TokenType.NUMBER, tokens.get(3).getType());
+        assertEquals("5", tokens.get(3).getValue());
+        assertEquals(TokenType.PARENTHESIS, tokens.get(4).getType());
+        assertEquals(")", tokens.get(4).getValue());
+    }
+
+    @Test(expected = ExpressionException.class)
+    public void testTokenize_InvalidCharacters() {
+        parser.tokenize("2 * @x - 5");
+    }
+
+    @Test(expected = ExpressionException.class)
+    public void testTokenize_InvalidCharactersAtEnd() {
+        parser.tokenize("2 + 5a");
+    }
+    
     // --- Testes para o método validateTokenSequence (casos de erro) ---
     
     @Test(expected = ExpressionException.class)
@@ -148,6 +203,68 @@ public class ExpressionParserTestes {
     @Test(expected = ExpressionException.class)
     public void testValidateTokenSequence_NumberBeforeFunction() {
         List<Token> tokens = asList(new NumberToken("5"), new FunctionToken("sin"));
+        parser.validateTokenSequence(tokens);
+    }
+    
+    // --- Novos testes para o método validateTokenSequence ---
+    
+    @Test(expected = ExpressionException.class)
+    public void testValidateTokenSequence_OperatorAtStart() {
+        List<Token> tokens = asList(new OperatorToken("/"), new NumberToken("5"));
+        parser.validateTokenSequence(tokens);
+    }
+    
+    @Test(expected = ExpressionException.class)
+    public void testValidateTokenSequence_FactorialAtStart() {
+        List<Token> tokens = asList(new OperatorToken("!"), new NumberToken("5"));
+        parser.validateTokenSequence(tokens);
+    }
+
+    @Test(expected = ExpressionException.class)
+    public void testValidateTokenSequence_NumberBeforeOpenParenthesis() {
+        List<Token> tokens = asList(new NumberToken("5"), new ParenthesisToken("("), new NumberToken("3"), new ParenthesisToken(")"));
+        parser.validateTokenSequence(tokens);
+    }
+    
+    @Test(expected = ExpressionException.class)
+    public void testValidateTokenSequence_CloseParenthesisBeforeNumber() {
+        List<Token> tokens = asList(new ParenthesisToken("("), new NumberToken("3"), new ParenthesisToken(")"), new NumberToken("5"));
+        parser.validateTokenSequence(tokens);
+    }
+
+    @Test(expected = ExpressionException.class)
+    public void testValidateTokenSequence_FunctionNotFollowedByParenthesis() {
+        List<Token> tokens = asList(new FunctionToken("sin"), new NumberToken("3"));
+        parser.validateTokenSequence(tokens);
+    }
+
+    @Test(expected = ExpressionException.class)
+    public void testValidateTokenSequence_ConstantBeforeOpenParenthesis() {
+        List<Token> tokens = asList(new Token(TokenType.CONSTANT, "pi") {}, new ParenthesisToken("("));
+        parser.validateTokenSequence(tokens);
+    }
+
+    @Test(expected = ExpressionException.class)
+    public void testValidateTokenSequence_OperatorBeforeCloseParenthesis() {
+        List<Token> tokens = asList(new ParenthesisToken("("), new NumberToken("5"), new OperatorToken("+"), new ParenthesisToken(")"));
+        parser.validateTokenSequence(tokens);
+    }
+
+    @Test(expected = ExpressionException.class)
+    public void testValidateTokenSequence_DoubleComma() {
+        List<Token> tokens = asList(new NumberToken("5"), new Token(TokenType.SEPARATOR, ",") {}, new Token(TokenType.SEPARATOR, ",") {}, new NumberToken("3"));
+        parser.validateTokenSequence(tokens);
+    }
+
+    @Test(expected = ExpressionException.class)
+    public void testValidateTokenSequence_CommaAtEnd() {
+        List<Token> tokens = asList(new NumberToken("5"), new Token(TokenType.SEPARATOR, ",") {});
+        parser.validateTokenSequence(tokens);
+    }
+
+    @Test(expected = ExpressionException.class)
+    public void testValidateTokenSequence_CommaAfterFunction() {
+        List<Token> tokens = asList(new FunctionToken("sin"), new Token(TokenType.SEPARATOR, ",") {}, new NumberToken("5"));
         parser.validateTokenSequence(tokens);
     }
 }
