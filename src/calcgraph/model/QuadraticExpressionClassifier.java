@@ -32,7 +32,8 @@ public class QuadraticExpressionClassifier {
         c = 0;
 
         // Regex para encontrar os termos
-        Pattern pattern = Pattern.compile("([+-]?\\d*\\.?\\d*)x\\^2|([+-]?\\d*\\.?\\d*)x|([+-]?\\d+)");
+        Pattern pattern = Pattern.compile("([+-]?\\d*\\.?\\d*)\\*?x\\^2|([+-]?\\d*\\.?\\d*)\\*?x(?!\\^)|([+-]?\\d*\\.?\\d+)");
+
         Matcher matcher = pattern.matcher(equation);
 
         while (matcher.find()) {
