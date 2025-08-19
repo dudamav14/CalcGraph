@@ -25,6 +25,10 @@ public class CalcService {
     public List<Expressao> historico(int limit) {
         return expRepo.listarRecentes(limit);
     }
+    
+    public List<Favorito> favoritos() {
+        return favRepo.listAll();
+    }
 
     /** Cria/atualiza favorito para uma expressão */
     public Favorito marcarFavorito(Long idExpressao, String apelido, String descricao) {

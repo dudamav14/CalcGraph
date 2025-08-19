@@ -49,9 +49,9 @@ public class TokenTestes {
     public void testTokenToString() {
         // Verifica se o método toString da classe base retorna a representação esperada.
         NumberToken numberToken = new NumberToken("10");
-        assertEquals("Token{type=NUMBER, value='10'}", numberToken.toString());
+        assertEquals("Token{type=NUMBER, value='10', arguments='1'}", numberToken.toString());
         
         OperatorToken operatorToken = new OperatorToken("-");
-        assertEquals("Token{type=OPERATOR, value='-'}", operatorToken.toString());
+        assertEquals("Token{type=OPERATOR, value='-', arguments='1'}", operatorToken.toString());
     }
 }

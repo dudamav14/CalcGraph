@@ -97,7 +97,10 @@
                               <Button maxWidth="1.7976931348623157E308" onAction="#handleOperator" style="-fx-background-color: #ADD8E6;" text="+" GridPane.columnIndex="4" GridPane.rowIndex="5" />
                               <Button maxWidth="1.7976931348623157E308" onAction="#handleNumber" text="0" GridPane.columnIndex="0" GridPane.rowIndex="6" />
                               <Button maxWidth="1.7976931348623157E308" onAction="#handleDecimal" text="." GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                              <Button maxWidth="1.7976931348623157E308" onAction="#handleFunction" style="-fx-background-color: #ADD8E6;" text="floor" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+                              <Button maxWidth="1.7976931348623157E308" onAction="#handleSeparator" text="," GridPane.columnIndex="2" GridPane.rowIndex="6" />
+                              <Button maxWidth="1.7976931348623157E308" onAction="#handleFunction" text="pa" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                              <Button maxWidth="1.7976931348623157E308" onAction="#handleFunction" text="pg" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+                              <Button maxWidth="1.7976931348623157E308" onAction="#handleFunction" style="-fx-background-color: #ADD8E6;" text="floor" GridPane.columnIndex="3" GridPane.rowIndex="7" />
                               <Button maxWidth="1.7976931348623157E308" onAction="#handleFunction" style="-fx-background-color: #ADD8E6;" text="ceil" GridPane.columnIndex="3" GridPane.rowIndex="6" />
                               <Button maxWidth="1.7976931348623157E308" onAction="#handleEquals" style="-fx-background-color: #4CAF50;" text="=" GridPane.columnIndex="4" GridPane.rowIndex="6" />
                               
@@ -108,8 +111,8 @@
                                       <MenuItem onAction="#handleFunction" text="median" />
                                       <MenuItem onAction="#handleFunction" text="variance" />
                                       <MenuItem onAction="#handleFunction" text="standarddeviation" />
-                                      <MenuItem onAction="#handleFunction" text="Z" />
-                                      <MenuItem onAction="#handleFunction" text="T" />
+                                      <MenuItem onAction="#handleFunction" text="z" />
+                                      <MenuItem onAction="#handleFunction" text="t" />
                                   </items>
                               </MenuButton>
                               <Button maxWidth="1.7976931348623157E308" onAction="#handleOperator" style="-fx-background-color: #ADD8E6;" text="!" GridPane.columnIndex="2" GridPane.rowIndex="7" />
@@ -138,7 +141,7 @@
                                </HBox>
                                 <HBox spacing="5">
                                     <Button text="☆" onAction="#handleToggleFavorite"/>
-                                    <TextField onMouseClicked="#handleFunctionFieldClick" promptText="Digite a função (ex: x^2)" />
+                                    <TextField onMouseClicked="#handleFunctionFieldClick" promptText="Digite a função" />
                                     <Button text="X" onAction="#handleRemoveFunctionField"/>
                                 </HBox>
                                <HBox alignment="CENTER">
@@ -220,13 +223,18 @@
                                <Button text="tan" maxWidth="1.7976931348623157E308" onAction="#handleGraphFunction" GridPane.columnIndex="4" GridPane.rowIndex="3" />
                                <Button text="log" maxWidth="1.7976931348623157E308" onAction="#handleGraphFunction" GridPane.columnIndex="5" GridPane.rowIndex="3" />
                                <Button text="ln" maxWidth="1.7976931348623157E308" onAction="#handleGraphFunction" GridPane.columnIndex="6" GridPane.rowIndex="3" />
+                               <Button text="pa" maxWidth="1.7976931348623157E308" onAction="#handleGraphFunction" GridPane.columnIndex="7" GridPane.rowIndex="3" />
+                               <Button text="pg" maxWidth="1.7976931348623157E308" onAction="#handleGraphFunction" GridPane.columnIndex="8" GridPane.rowIndex="3" />
+                               <Button text="," maxWidth="1.7976931348623157E308" onAction="#handleGraphSeparator" GridPane.columnIndex="9" GridPane.rowIndex="3" />
                                <Button text="mean" maxWidth="1.7976931348623157E308" onAction="#handleGraphFunction" GridPane.columnIndex="0" GridPane.rowIndex="4" />
                                <Button text="mode" maxWidth="1.7976931348623157E308" onAction="#handleGraphFunction" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                                <Button text="median" maxWidth="1.7976931348623157E308" onAction="#handleGraphFunction" GridPane.columnIndex="2" GridPane.rowIndex="4" />
                                <Button text="variance" maxWidth="1.7976931348623157E308" onAction="#handleGraphFunction" GridPane.columnIndex="3" GridPane.rowIndex="4" />
                                <Button text="standartdeviation" maxWidth="1.7976931348623157E308" onAction="#handleGraphFunction" GridPane.columnIndex="4" GridPane.rowIndex="4" />
-                               <Button text="Z" maxWidth="1.7976931348623157E308" onAction="#handleGraphFunction" GridPane.columnIndex="5" GridPane.rowIndex="4" />
-                               <Button text="T" maxWidth="1.7976931348623157E308" onAction="#handleGraphFunction" GridPane.columnIndex="6" GridPane.rowIndex="4" />
+                               <Button text="z" maxWidth="1.7976931348623157E308" onAction="#handleGraphFunction" GridPane.columnIndex="5" GridPane.rowIndex="4" />
+                               <Button text="t" maxWidth="1.7976931348623157E308" onAction="#handleGraphFunction" GridPane.columnIndex="6" GridPane.rowIndex="4" />
+                               <Button id="btnHistorico" layoutX="330.0" layoutY="383.0" maxWidth="1.7976931348623157E308" onAction="#handleOpenHistory" style="-fx-background-color: #000000;" text="Histórico" textFill="WHITE" GridPane.columnIndex="7" GridPane.rowIndex="4"/>
+                               <Button id="btnFavoritos" layoutX="330.0" layoutY="383.0" maxWidth="1.7976931348623157E308" onAction="#handleOpenFavorites" style="-fx-background-color: #000000;" text="Favoritos" textFill="WHITE" GridPane.columnIndex="8" GridPane.rowIndex="4"/>
                             </children>
                          </GridPane>
                     </children>

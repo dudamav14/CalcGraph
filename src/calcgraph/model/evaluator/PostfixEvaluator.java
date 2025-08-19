@@ -26,7 +26,11 @@ public class PostfixEvaluator {
                functionName.equals("mode") ||
                functionName.equals("median") ||
                functionName.equals("variance") ||
-               functionName.equals("standarddeviation");
+               functionName.equals("standarddeviation") ||
+               functionName.equals("z") ||
+               functionName.equals("t") ||
+               functionName.equals("pa") ||
+               functionName.equals("pg");
     }
     
     public double evaluate(List<Token> postfixTokens) {
@@ -256,6 +260,53 @@ public class PostfixEvaluator {
                 variance = squaredDifferencesSumStdDev / numbers.size();
 
                 return Math.sqrt(variance);
+            case "z":
+                if(numbers.size() != 4){
+                    throw new ExpressionException("Para calcular a Hipótese Z, a lista deve ter exatamente 4 elementos: [média da amostra (X), média da população (μ), desvio padrão populacional (σ), tamanho da amostra (n)]");
+                }
+                double media_amostraZ = numbers.get(0);
+                double media_populacaoZ = numbers.get(1);
+                double desvio_padrao_populacaoZ = numbers.get(2);
+                double tamanho_amostraZ = numbers.get(3);
+                
+                return (media_amostraZ - media_populacaoZ) / (desvio_padrao_populacaoZ/Math.sqrt(tamanho_amostraZ));
+                
+            case "t":
+                if(numbers.size() != 4){
+                    throw new ExpressionException("Para calcular a Hipótese T, a lista deve ter exatamente 4 elementos: [média da amostra (X), média da população (μ), desvio padrão amostral (s), tamanho da amostra (n)]");
+                }
+                double media_amostraT = numbers.get(0);
+                double media_populacaoT = numbers.get(1);
+                double desvio_padrao_amostraT = numbers.get(2);
+                double tamanho_amostraT = numbers.get(3);
+                
+                return (media_amostraT - media_populacaoT) / (desvio_padrao_amostraT/Math.sqrt(tamanho_amostraT));
+            case "pa":
+                if (numbers.size() != 3) {
+                    throw new ExpressionException("A função 'PA' requer 3 argumentos: (a1, n, r).");
+                }
+                double a1PA = numbers.get(0);
+                double nPA = numbers.get(1);
+                double r = numbers.get(2);
+                
+                if (nPA != Math.floor(nPA) || nPA <= 0) {
+                    throw new ExpressionException("O número de termos (n) da PA deve ser um inteiro positivo.");
+                }
+                
+                return a1PA + (nPA - 1) * r;
+            case "pg":
+                if (numbers.size() != 3) {
+                    throw new ExpressionException("A função 'PG' requer 3 argumentos: (a1, n, q).");
+                }
+                double a1PG = numbers.get(0);
+                double nPG = numbers.get(1);
+                double q = numbers.get(2);
+                
+                if (nPG != Math.floor(nPG) || nPG <= 0) {
+                    throw new ExpressionException("O número de termos (n) da PG deve ser um inteiro positivo.");
+                }
+                
+                return  a1PG * Math.pow(q, nPG-1);
             default:
                 throw new ExpressionException("Função estatística desconhecida: " + functionName);
        }    
