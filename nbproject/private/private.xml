@@ -29,6 +29,10 @@
             <file>file:/C:/Users/Caio/Documents/NetBeansProjects/CalcGraph/src/calcgraph/persistence/JPAUtil.java</file>
             <file>file:/C:/Users/Caio/Documents/NetBeansProjects/CalcGraph/src/calcgraph/persistence/DBPing.java</file>
             <file>file:/C:/Users/Caio/Documents/NetBeansProjects/CalcGraph/src/calcgraph/model/ResultadoAvaliacao.java</file>
+            <file>file:/C:/Users/Caio/Documents/NetBeansProjects/CalcGraph/test/calcgraph/model/parser/ExpressionParserTestes.java</file>
+            <file>file:/C:/Users/Caio/Documents/NetBeansProjects/CalcGraph/test/calcgraph/model/parser/ShuntingYardAlgorithmTestes.java</file>
+            <file>file:/C:/Users/Caio/Documents/NetBeansProjects/CalcGraph/test/calcgraph/model/QuadraticExpressionClassifierTestes.java</file>
+            <file>file:/C:/Users/Caio/Documents/NetBeansProjects/CalcGraph/test/calcgraph/model/token/TokenTestes.java</file>
         </group>
     </open-files>
 </project-private>

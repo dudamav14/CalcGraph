@@ -503,7 +503,6 @@ public class CalculatorController {
 
         fieldBox.getChildren().addAll(favButton, tf, removeBtn);
 
-        // Adiciona antes do botão "+"
         functionInputsBox.getChildren().add(functionInputsBox.getChildren().size() - 1, fieldBox);
     }
 
