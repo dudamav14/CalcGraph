@@ -4,6 +4,8 @@
  */
 package calcgraph.model;
 
+import calcgraph.model.token.TokenType;
+
 /**
  *
  * @author Caio
@@ -12,11 +14,13 @@ public class ResultadoAvaliacao {
 
     private TipoResultado tipo;
     private Double valor;
+    private String binario;
     private String funcao;
 
     public enum TipoResultado {
         NUMERICO,
-        GRAFICO
+        GRAFICO,
+        BINARIO
     }
 
     // Construtor para resultados numéricos
@@ -30,6 +34,11 @@ public class ResultadoAvaliacao {
         this.tipo = TipoResultado.GRAFICO;
         this.funcao = funcao;
     }
+    
+    public ResultadoAvaliacao(String binario, TipoResultado tipo) {
+        this.tipo = tipo;
+        this.binario = binario;
+    }
 
     // Getters para os campos
     public TipoResultado getTipo() {
@@ -42,5 +51,9 @@ public class ResultadoAvaliacao {
 
     public String getFuncao() {
         return funcao;
+    }
+    
+    public String getBinario() {
+        return binario;
     }
 }

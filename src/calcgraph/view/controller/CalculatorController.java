@@ -51,12 +51,18 @@ public class CalculatorController {
 
     @FXML
     private TextField display; // Campo de expressão/resultado para o modo Cálculo
+    
+    @FXML
+    private TextField display2; // Campo de expressão/resultado para o modo Cálculo
 
     @FXML
     private Label errorMessageLabel; // Label para exibir mensagens de erro na UI
     
     @FXML
     private Label errorMessageLabelGrafico; // Label para exibir mensagens de erro na UI
+    
+    @FXML
+    private Label errorMessageLabel2; // Label para exibir mensagens de erro na UI
 
 
     
@@ -69,6 +75,8 @@ public class CalculatorController {
     private VBox graphModePane;       // Painel do modo Gráfico
     @FXML
     private VBox numericModePane;     // Painel do modo Numérico
+    @FXML
+    private VBox numericModeAjuda;     // Painel do modo Numérico
 
     @FXML
     private Button btnModeCalculation; // Botão de navegação para Cálculo
@@ -76,6 +84,8 @@ public class CalculatorController {
     private Button btnModeGraph;       // Botão de navegação para Gráfico
     @FXML
     private Button btnModeNumeric;     // Botão de navegação para Numérico
+    @FXML
+    private Button btnModeAjuda;     // Botão de navegação para Numérico
     
 
     private final DecimalFormat decimalFormat;
@@ -108,6 +118,8 @@ public class CalculatorController {
             showModePane(graphModePane);
         } else if (clickedButton == btnModeNumeric) {
             showModePane(numericModePane);
+        } else if(clickedButton == btnModeAjuda){
+            showModePane(numericModeAjuda);
         }
         updateModeButtonStyles(clickedButton);
     }
@@ -122,6 +134,7 @@ public class CalculatorController {
         btnModeCalculation.setStyle("-fx-background-color: #e6f7ff;");
         btnModeGraph.setStyle("-fx-background-color: #e6f7ff;");
         btnModeNumeric.setStyle("-fx-background-color: #e6f7ff;");
+        btnModeAjuda.setStyle("-fx-background-color: #e6f7ff;");
 
         activeButton.setStyle("-fx-background-color: #cceeff; -fx-font-weight: bold;");
     }
@@ -805,4 +818,91 @@ public class CalculatorController {
             }
         } 
     }
+    
+    // Numerico
+    
+    @FXML
+    private void handleFunctionNumeric(ActionEvent event) {
+         String functionText = "";
+
+        // Verifica a origem do evento (Button ou MenuItem) e extrai o texto
+        if (event.getSource() instanceof Button) {
+            functionText = ((Button) event.getSource()).getText();
+        } else if (event.getSource() instanceof MenuItem) {
+            functionText = ((MenuItem) event.getSource()).getText();
+        }
+
+        if (!functionText.isEmpty()) {
+            display2.appendText(functionText + "(");
+            errorMessageLabel2.setText("");
+        }
+    }
+    
+    @FXML
+    private void handleOperatorNumeric(ActionEvent event) {
+         String operator = ((Button) event.getSource()).getText();
+         display2.appendText(operator);
+         errorMessageLabel2.setText("");
+    }
+    
+    @FXML
+    private void handleNumberNumeric(ActionEvent event) {
+         String number = ((Button) event.getSource()).getText();
+         display2.appendText(number);
+         errorMessageLabel2.setText("");
+    }
+    
+    @FXML
+    private void handleEqualsNumeric(ActionEvent event) {
+         String expression = display2.getText();
+         
+        try {
+            ResultadoAvaliacao result = AnalisadorDeExpressoes.avaliarExpressaoBinario(expression);
+            
+            if (result.getTipo() == ResultadoAvaliacao.TipoResultado.NUMERICO) {
+                errorMessageLabel2.setText("Utilize outro modo para calcular números.");
+                
+            }else if (result.getTipo() == ResultadoAvaliacao.TipoResultado.GRAFICO) {
+                errorMessageLabel2.setText("Variáveis só podem ser calculadas no modo gráfico.");
+            }else if (result.getTipo() == ResultadoAvaliacao.TipoResultado.BINARIO){
+                System.out.println(result.getBinario());
+                String resultText = result.getBinario();
+
+                display2.setText(resultText);
+                errorMessageLabel2.setText("");
+            }
+
+            // salvar no histórico
+            try {
+                calcgraph.model.Expressao e = service.registrarExpressao(expression, result.getBinario(), 0);
+                lastExpressaoId = e.getId();
+            } catch (Exception dbEx) {
+                System.err.println("Falha ao salvar histórico: " + dbEx.getMessage());
+            }
+
+        } catch (ExpressionException e) {
+            errorMessageLabel2.setText("Erro: " + e.getMessage());
+            System.err.println("Erro na expressão (UI): " + e.getMessage());
+        } catch (Exception e) {
+            errorMessageLabel2.setText("Erro Inesperado. Verifique o console.");
+            System.err.println("Ocorreu um erro inesperado (UI): " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    
+    @FXML
+    private void handleClearNumeric(ActionEvent event) {
+         display2.clear();
+         errorMessageLabel2.setText("");
+    }
+    
+    @FXML
+    private void handleDeleteNumeric(ActionEvent event) {
+         String currentText = display2.getText();
+         if (!currentText.isEmpty()) {
+            display2.setText(currentText.substring(0, currentText.length() - 1));
+         }
+         errorMessageLabel2.setText("");
+    }
+    
 }

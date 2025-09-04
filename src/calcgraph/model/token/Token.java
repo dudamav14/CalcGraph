@@ -6,7 +6,7 @@ package calcgraph.model.token;
  */
 public abstract class Token {
     private final TokenType type;
-    private final String value;
+    private String value;
     private int arguments;
 
     public Token(TokenType type, String value) {
@@ -23,6 +23,10 @@ public abstract class Token {
 
     public TokenType getType() {
         return type;
+    }
+    
+     public void setValue(String value) {
+        this.value = value;
     }
 
     public String getValue() {

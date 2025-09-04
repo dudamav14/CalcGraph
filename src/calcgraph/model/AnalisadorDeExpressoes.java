@@ -5,6 +5,7 @@ import calcgraph.model.exception.ExpressionException;
 import calcgraph.model.parser.ExpressionParser;
 import calcgraph.model.parser.ShuntingYardAlgorithm;
 import calcgraph.model.token.Token;
+import calcgraph.model.token.TokenType;
 
 import java.util.List;
 import java.util.Stack;
@@ -80,5 +81,56 @@ public class AnalisadorDeExpressoes {
         }
 
         return new ResultadoAvaliacao(result);
+    }
+    
+    public static ResultadoAvaliacao  avaliarExpressaoBinario(String expressao) {
+        
+        if (expressao.contains("x")) {
+        // É uma função. Retorna um objeto do tipo GRAFICO com a expressão.
+            return new ResultadoAvaliacao(expressao);
+        }
+        
+        if (!validarExpressaoPreliminar(expressao)) {
+            throw new ExpressionException("Expressão inválida: Parênteses desbalanceados ou vazia.");
+        }
+        
+        ExpressionParser parser = new ExpressionParser();
+        ShuntingYardAlgorithm shuntingYard = new ShuntingYardAlgorithm();
+        PostfixEvaluator evaluator = new PostfixEvaluator();
+
+        List<Token> infixTokensPreProcessed;
+        List<Token> postfixTokens;
+        double result;
+
+        try {
+            infixTokensPreProcessed = parser.tokenize(expressao); 
+            System.out.println("Tokens Infixos (Sem validação): " + infixTokensPreProcessed);
+            for(Token bin : infixTokensPreProcessed){
+                if(bin.getType() == TokenType.NUMBER){
+                    System.out.println("entrou, "+bin.getValue());
+                   int n = Integer.parseInt(bin.getValue(), 2);
+                   bin.setValue(Integer.toString(n));
+                   System.out.println("passou, \n "+bin.getValue());
+                }
+            }
+            parser.validateTokenSequence(infixTokensPreProcessed);
+            postfixTokens = shuntingYard.convertToPostfix(infixTokensPreProcessed);
+
+            System.out.println("Tokens Infixos (Processados): " + infixTokensPreProcessed);
+            System.out.println("Tokens Pós-Fixados: " + postfixTokens);
+
+            result = evaluator.evaluate(postfixTokens);
+            System.out.println("Res: " + result);
+            
+
+        } catch (ExpressionException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new ExpressionException("Erro inesperado ao avaliar a expressão: " + e.getMessage(), e);
+        }
+        
+        String resultFinal = Integer.toBinaryString((int) result);
+        System.out.println("Res final: " + resultFinal);
+        return new ResultadoAvaliacao(resultFinal, ResultadoAvaliacao.TipoResultado.BINARIO);
     }
 }
